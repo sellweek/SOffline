@@ -7,7 +7,7 @@
 namespace sqlite {
 
     Client::Client(const std::string &path) {
-        int error = sqlite3_open_v2(path.c_str(), &db, SQLITE_OPEN_NOMUTEX, nullptr);
+        int error = sqlite3_open_v2(path.c_str(), &db, SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE, nullptr);
         if (error) {
             Exception exc(sqlite3_errmsg(db));
             sqlite3_close(db);

@@ -21,6 +21,11 @@ namespace sqlite {
         std::string msg;
     };
 
+    class ColumnOutOfBoundsException : public Exception {
+    public:
+        ColumnOutOfBoundsException(): Exception("Column index out of bounds") {}
+    };
+
     class Client {
     public:
         Client(const std::string &path);
