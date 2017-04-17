@@ -10,7 +10,7 @@ namespace sqlite {
     void free_c_str(void *str) {
         delete [] (char *) str;
     }
-
+    /// Represents a prepared statement
     Statement::Statement(Client &client, std::string statement) : client(client) {
         int error = sqlite3_prepare_v2(client.get_db(), statement.c_str(), (int) statement.size(), &stmt, nullptr);
         if (error) {

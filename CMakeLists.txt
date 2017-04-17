@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 project(semestralka)
 
+add_custom_target(doc doxygen Doxyfile)
+
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.cpp src/sqlite/sqlite_statement.h)
