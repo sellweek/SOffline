@@ -45,3 +45,5 @@ cmake-build-*
 .idea/
 *.cbp
 semestralka
+
+doc/*
