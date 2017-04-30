@@ -10,32 +10,50 @@
 #include <ctime>
 #include <iomanip>
 #include <ostream>
+#include <unordered_map>
 
 namespace models {
+    enum class ImportType {
+        Int64,
+        String,
+        Datetime,
+        Bool
+    };
 
-    struct Badge {
+    class Model {
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const = 0;
+        friend std::ostream &operator <<(std::ostream &os, const models::Model &m);
+    };
+
+    std::ostream &operator <<(std::ostream &os, const models::Model &m);
+
+
+    struct Badge : public Model {
         int64_t id;
         int64_t user;
         std::string name;
         std::tm date;
         int64_t badge_class;
         bool tag_based;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    std::ostream &operator <<(std::ostream &os, const models::Badge &b);
 
-    struct Comment {
+    struct Comment : public Model {
         int64_t id;
         int64_t post;
         int64_t score;
         std::string text;
         std::tm date;
         int64_t user;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
 
 
-    struct PostHistoryEntry {
+    struct PostHistoryEntry : public Model {
         int64_t id;
         int64_t post;
         int64_t type;
@@ -44,19 +62,20 @@ namespace models {
         std::string guid;
         std::string comment;
         std::string text;
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    std::ostream &operator<<(std::ostream &os, const models::PostHistoryEntry &h);
 
-    struct PostLink {
+    struct PostLink : public Model {
         int64_t id;
         int64_t source;
         int64_t target;
         int64_t type;
         std::tm date;
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    struct Post {
+    struct Post : public Model {
         int64_t id;
         int64_t type;
         int64_t parent;
@@ -75,16 +94,20 @@ namespace models {
         std::tm last_activity;
         std::tm created_at;
         std::tm closed_at;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    struct Tag {
+    struct Tag : public Model {
         int64_t id;
         int64_t wiki;
         int64_t excerpt;
         std::string name;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    struct User {
+    struct User : public Model {
         int64_t id;
         int64_t reputation;
         int64_t upvotes;
@@ -96,13 +119,17 @@ namespace models {
         std::string about;
         std::tm created_at;
         std::tm last_access;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
-    struct Vote {
+    struct Vote : public Model {
         int64_t id;
         int64_t post;
         int64_t type;
         int64_t user;
+
+        virtual std::unordered_map<std::string, std::pair<ImportType, void*>> xml_map() const;
     };
 
 }

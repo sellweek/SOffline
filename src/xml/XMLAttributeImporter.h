@@ -7,6 +7,7 @@
 
 #include "tinyxml2.h"
 #include "xml/util.h"
+#include "models.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,8 +20,6 @@ namespace xml {
         XMLAttributeImporter(std::string path, std::string rootElemName);
 
         virtual bool VisitEnter(const tinyxml2::XMLElement &elem, const tinyxml2::XMLAttribute *attr) override;
-
-        virtual M handle_element(const std::string &elemName, const std::vector<const tinyxml2::XMLAttribute*> &attrs) = 0;
 
         virtual std::vector<M> parse();
 
@@ -43,21 +42,46 @@ namespace xml {
             }
         }
 
+
         if (rootHandled) {
-            std::vector<const tinyxml2::XMLAttribute *> attrs;
+            M m {};
+            std::unordered_map<std::string, std::pair<models::ImportType, void*>> mapping = m.xml_map();
             while (attr != nullptr) {
-                attrs.push_back(attr);
+                const auto &iter = mapping.find(std::string(attr->Name()));
+                if (iter == mapping.end()) {
+                    attr = attr->Next();
+                    continue;
+                }
+                std::pair<models::ImportType, void*> props = (*iter).second;
+                tinyxml2::XMLError err = tinyxml2::XML_SUCCESS;
+                switch (props.first) {
+                    case models::ImportType::Int64:
+                        err = attr->QueryInt64Value((int64_t *)props.second);
+                        break;
+                    case models::ImportType::String:
+                        *((std::string*)props.second) = attr->Value();
+                        break;
+                    case models::ImportType::Datetime:
+                        *((std::tm*)props.second) = parse_time(attr->Value());
+                        break;
+                    case models::ImportType::Bool:
+                        bool *p = (bool*) props.second;
+                        std::string(attr->Value()) == "True" ? (*p = true) : (*p = false);
+                        break;
+                }
+                if (err != tinyxml2::XML_SUCCESS) {
+                    throw Exception(err);
+                }
                 attr = attr->Next();
             }
-            results.push_back(handle_element(std::string(elem.Name()), attrs));
+            results.push_back(std::move(m));
         }
         return true;
     }
 
     template <typename M>
-    XMLAttributeImporter<M>::XMLAttributeImporter(std::string path, std::string rootElemName) : rootElemName(rootElemName),
-                                                                                                rootHandled(false),
-                                                                                                doc(), path(path) {}
+    XMLAttributeImporter<M>::XMLAttributeImporter(std::string path, std::string rootElemName):
+            rootElemName(rootElemName), rootHandled(false), doc(), path(path) {}
 
     template <typename M>
     std::vector<M> XMLAttributeImporter<M>::parse() {

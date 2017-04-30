@@ -3,37 +3,20 @@
 #include <chrono>
 #include <string>
 #include <fstream>
-#include <xml/BadgeImporter.h>
-#include <xml/CommentImporter.h>
-#include <xml/HistoryImporter.h>
-#include <xml/PostLinkImporter.h>
-#include <xml/TagImporter.h>
 
 #include "src/sqlite/sqlite_client.h"
 #include "src/sqlite/sqlite_statement.h"
 
-#include "xml/PostImporter.h"
+#include "xml/XMLAttributeImporter.h"
 #include "models.h"
 
 int main() {
-    xml::PostImporter pi("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Posts.xml");
-    auto posts = pi.parse();
-    std::cout << "Got " << posts.size() << " posts." << std::endl;
-    xml::BadgeImporter bi("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Badges.xml");
+    xml::XMLAttributeImporter<models::Tag> bi("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Tags.xml", "tags");
     auto badges = bi.parse();
     std::cout << "Got " << badges.size() << " badges." << std::endl;
-    xml::CommentImporter ci("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Comments.xml");
-    auto comments = ci.parse();
-    std::cout << "Got " << comments.size() << " comments." << std::endl;
-    xml::HistoryImporter hi("/Users/selvek/Downloads/worldbuilding.stackexchange.com/PostHistory.xml");
-    auto edits = hi.parse();
-    std::cout << "Got " << edits.size() << " histories." << std::endl;
-    xml::PostLinkImporter li("/Users/selvek/Downloads/worldbuilding.stackexchange.com/PostLinks.xml");
-    auto links = li.parse();
-    std::cout << "Got " << links.size() << " links." << std::endl;
-    xml::TagImporter ti("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Tags.xml");
-    auto tags = ti.parse();
-    std::cout << "Got " << tags.size() << " tags." << std::endl;
+    for (const auto &b : badges) {
+        std::cout << b;
+    }
     std::cout << "Done" << std::endl;
     /*
     std::cout << "Starting" << std::endl;
