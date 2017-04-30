@@ -7,6 +7,7 @@
 #include <xml/CommentImporter.h>
 #include <xml/HistoryImporter.h>
 #include <xml/PostLinkImporter.h>
+#include <xml/TagImporter.h>
 
 #include "src/sqlite/sqlite_client.h"
 #include "src/sqlite/sqlite_statement.h"
@@ -30,6 +31,9 @@ int main() {
     xml::PostLinkImporter li("/Users/selvek/Downloads/worldbuilding.stackexchange.com/PostLinks.xml");
     auto links = li.parse();
     std::cout << "Got " << links.size() << " links." << std::endl;
+    xml::TagImporter ti("/Users/selvek/Downloads/worldbuilding.stackexchange.com/Tags.xml");
+    auto tags = ti.parse();
+    std::cout << "Got " << tags.size() << " tags." << std::endl;
     std::cout << "Done" << std::endl;
     /*
     std::cout << "Starting" << std::endl;
