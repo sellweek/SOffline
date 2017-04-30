@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <string>
 #include <ctime>
+#include <iomanip>
+#include <ostream>
 
 namespace models {
 
@@ -20,6 +22,8 @@ namespace models {
         bool tag_based;
     };
 
+    std::ostream &operator <<(std::ostream &os, const models::Badge &b);
+
     struct Comment {
         int64_t id;
         int64_t post;
@@ -28,6 +32,8 @@ namespace models {
         std::tm date;
         int64_t user;
     };
+
+
 
     struct PostHistoryEntry {
         int64_t id;
@@ -39,6 +45,8 @@ namespace models {
         std::string comment;
         std::string text;
     };
+
+    std::ostream &operator<<(std::ostream &os, const models::PostHistoryEntry &h);
 
     struct PostLink {
         int64_t id;
