@@ -5,7 +5,7 @@ add_custom_target(doc doxygen Doxyfile)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.cpp src/sqlite/sqlite_statement.h src/models.h src/xml/PrintingVisitor.cpp src/xml/PrintingVisitor.h src/xml/XMLAttributeImporter.h src/xml/util.h src/xml/PostImporter.cpp src/xml/PostImporter.h)
+set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.cpp src/sqlite/sqlite_statement.h src/models.h src/xml/XMLAttributeImporter.h src/xml/util.h src/xml/PostImporter.cpp src/xml/PostImporter.h src/xml/BadgeImporter.cpp src/xml/BadgeImporter.h src/xml/CommentImporter.cpp src/xml/CommentImporter.h src/xml/HistoryImporter.cpp src/xml/HistoryImporter.h src/models.cpp src/xml/PostLinkImporter.cpp src/xml/PostLinkImporter.h)
 
 find_package(PkgConfig)
 pkg_check_modules(sqlite3 REQUIRED)
