@@ -33,11 +33,16 @@ namespace xml {
 
     template <typename M>
     bool XMLAttributeImporter<M>::VisitEnter(const tinyxml2::XMLElement &elem, const tinyxml2::XMLAttribute *attr) {
-        if (!rootHandled && std::string(elem.Name()) != rootElemName) {
-            std::cout << elem.Name() << std::endl;
-            throw IncorrectFileException();
+        if (!rootHandled ) {
+            if (std::string(elem.Name()) != rootElemName) {
+                std::cout << elem.Name() << std::endl;
+                throw IncorrectFileException();
+            } else {
+                rootHandled = true;
+                return true;
+            }
         }
-        rootHandled = true;
+
         if (rootHandled) {
             std::vector<const tinyxml2::XMLAttribute *> attrs;
             while (attr != nullptr) {
