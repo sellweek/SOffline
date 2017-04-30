@@ -38,9 +38,9 @@ namespace xml {
                 p.last_edit = parse_time(std::string(attr->Value()));
             } else if (name == "LastActivityDate") {
                 p.last_activity = parse_time(std::string(attr->Value()));
-            }else if (name == "CreationDate") {
+            } else if (name == "CreationDate") {
                 p.created_at = parse_time(std::string(attr->Value()));
-            }else if (name == "ClosedDate") {
+            } else if (name == "ClosedDate") {
                 p.closed_at = parse_time(std::string(attr->Value()));
             }
             if (err != tinyxml2::XML_SUCCESS) {
