@@ -23,6 +23,10 @@ namespace xml {
 
         virtual std::vector<M> parse();
 
+        static std::vector<M> construct_and_parse(std::string path, std::string rootElemName)  {
+            XMLAttributeImporter<M> importer(path, rootElemName);
+            return importer.parse();
+        }
     protected:
         std::string rootElemName, path;
         bool rootHandled;
@@ -45,26 +49,26 @@ namespace xml {
 
         if (rootHandled) {
             M m {};
-            std::unordered_map<std::string, std::pair<models::ImportType, void*>> mapping = m.xml_map();
+            std::unordered_map<std::string, std::pair<models::ExternalType, void*>> mapping = m.xml_map();
             while (attr != nullptr) {
                 const auto &iter = mapping.find(std::string(attr->Name()));
                 if (iter == mapping.end()) {
                     attr = attr->Next();
                     continue;
                 }
-                std::pair<models::ImportType, void*> props = (*iter).second;
+                std::pair<models::ExternalType, void*> props = (*iter).second;
                 tinyxml2::XMLError err = tinyxml2::XML_SUCCESS;
                 switch (props.first) {
-                    case models::ImportType::Int64:
+                    case models::ExternalType::Int64:
                         err = attr->QueryInt64Value((int64_t *)props.second);
                         break;
-                    case models::ImportType::String:
+                    case models::ExternalType::String:
                         *((std::string*)props.second) = attr->Value();
                         break;
-                    case models::ImportType::Datetime:
+                    case models::ExternalType::Datetime:
                         *((std::tm*)props.second) = parse_time(attr->Value());
                         break;
-                    case models::ImportType::Bool:
+                    case models::ExternalType::Bool:
                         bool *p = (bool*) props.second;
                         std::string(attr->Value()) == "True" ? (*p = true) : (*p = false);
                         break;
