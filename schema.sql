@@ -125,6 +125,7 @@ CREATE TABLE "votes" (
   "post" integer NOT NULL,
   "type" integer NOT NULL,
   "user" integer NULL,
+  "creation_date" integer NOT NULL,
   PRIMARY KEY ("id"),
   FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
