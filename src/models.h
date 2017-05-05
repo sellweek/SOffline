@@ -30,6 +30,7 @@ namespace models {
     };
 
     class Model {
+    public:
         virtual std::unordered_map<std::string, std::pair<ExternalType, void*>> xml_map() const = 0;
         virtual std::vector<SQLMetadata> sql_map() const = 0;
         friend std::ostream &operator <<(std::ostream &os, const models::Model &m);

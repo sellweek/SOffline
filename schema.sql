@@ -116,8 +116,6 @@ CREATE TABLE "users" (
   PRIMARY KEY ("id")
 );
 
-CREATE UNIQUE INDEX "users_account_id" ON "users" ("account_id");
-
 
 DROP TABLE IF EXISTS "votes";
 CREATE TABLE "votes" (
