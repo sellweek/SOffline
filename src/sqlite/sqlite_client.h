@@ -64,6 +64,8 @@ namespace sqlite {
          */
         sqlite3 *get_db() { return db; }
 
+        int max_variables();
+
     private:
         sqlite3 *db;
     };

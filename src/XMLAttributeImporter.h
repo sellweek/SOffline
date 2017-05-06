@@ -6,9 +6,10 @@
 #define SEMESTRALKA_ATTRIBUTECOLLECTINGVISITOR_H
 
 #include "tinyxml2.h"
-#include "util.h"
+#include "xml_util.h"
 #include "models.h"
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -21,16 +22,16 @@ namespace xml {
 
         virtual bool VisitEnter(const tinyxml2::XMLElement &elem, const tinyxml2::XMLAttribute *attr) override;
 
-        virtual std::vector<M> parse();
+        virtual std::vector<std::unique_ptr<M>> parse();
 
-        static std::vector<M> construct_and_parse(std::string path, std::string rootElemName)  {
+        static std::vector<std::unique_ptr<M>> construct_and_parse(std::string path, std::string rootElemName)  {
             XMLAttributeImporter<M> importer(path, rootElemName);
-            return importer.parse();
+            return std::move(importer.parse());
         }
     protected:
         std::string rootElemName, path;
         bool rootHandled;
-        std::vector<M> results;
+        std::vector<std::unique_ptr<M>> results;
         tinyxml2::XMLDocument doc;
     };
 
@@ -48,8 +49,8 @@ namespace xml {
 
 
         if (rootHandled) {
-            M m {};
-            std::unordered_map<std::string, std::pair<models::ExternalType, void*>> mapping = m.xml_map();
+            auto m = new M();
+            std::unordered_map<std::string, std::pair<models::ExternalType, void*>> mapping = m->xml_map();
             while (attr != nullptr) {
                 const auto &iter = mapping.find(std::string(attr->Name()));
                 if (iter == mapping.end()) {
@@ -78,7 +79,7 @@ namespace xml {
                 }
                 attr = attr->Next();
             }
-            results.push_back(std::move(m));
+            results.push_back(std::unique_ptr<M>(m));
         }
         return true;
     }
@@ -88,13 +89,13 @@ namespace xml {
             rootElemName(rootElemName), rootHandled(false), doc(), path(path) {}
 
     template <typename M>
-    std::vector<M> XMLAttributeImporter<M>::parse() {
+    std::vector<std::unique_ptr<M>> XMLAttributeImporter<M>::parse() {
         tinyxml2::XMLError result = doc.LoadFile(path.c_str());
         if (result != tinyxml2::XML_SUCCESS) {
             throw Exception(result);
         }
         doc.Accept(this);
-        return results;
+        return std::move(results);
     }
 }
 #endif //SEMESTRALKA_ATTRIBUTECOLLECTINGVISITOR_H

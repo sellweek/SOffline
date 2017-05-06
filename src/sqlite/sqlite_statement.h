@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <iterator>
 #include <string>
+#include <memory>
 #include <sstream>
 
 #include "sqlite_client.h"
@@ -40,14 +41,13 @@ namespace sqlite {
          * @param inserted A vector of models to insert.
          * @return A bound statement which only has to be stepped to insert the given models.
          */
-        template <typename M>
-        Statement(Client &client, std::string tableName, std::vector<M> inserted): client(client) {
+        Statement(Client &client, std::string tableName, const std::vector<std::shared_ptr<models::Model>> &inserted): client(client) {
             std::ostringstream ss;
             if (inserted.size() == 0) {
                 throw std::length_error("no models to insert");
             }
             ss << "INSERT INTO `" << tableName << "` ";
-            const auto &map = inserted[0].sql_map();
+            const auto &map = inserted[0]->sql_map();
             std::vector<std::string> columns;
             columns.reserve(map.size());
             for (const auto &md : map) {
@@ -63,7 +63,7 @@ namespace sqlite {
             }
             create_sqlite3_stmt(ss.str());
             for (int i = 0; i < inserted.size(); i++) {
-                bind_mapped(i*map.size()+1, inserted[i]);
+                bind_mapped(i*map.size()+1, *inserted[i]);
             }
         }
 
@@ -102,8 +102,7 @@ namespace sqlite {
             check_error(sqlite3_bind_null(stmt, idx));
         }
 
-        template <typename M>
-        void bind_mapped(int startIdx, const M &m) {
+        void bind_mapped(int startIdx, const models::Model &m) {
             auto map = m.sql_map();
             for (int i = startIdx; i < startIdx + map.size(); i++) {
                 switch (map[i - startIdx].columnType) {

@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address" )
 
-set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.h src/models.h src/xml/XMLAttributeImporter.h src/xml/util.h src/models.cpp src/xml/import.cpp)
+set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.h src/models.h src/XMLAttributeImporter.h src/xml_util.h src/models.cpp src/import.cpp)
 
 find_package(PkgConfig)
 pkg_check_modules(sqlite3 REQUIRED)

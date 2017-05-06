@@ -19,4 +19,8 @@ namespace sqlite {
         sqlite3_close_v2(db);
     }
 
+    int Client::max_variables() {
+        return sqlite3_limit(db, SQLITE_LIMIT_VARIABLE_NUMBER, -1);
+    }
+
 }
