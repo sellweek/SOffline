@@ -21,7 +21,11 @@ void cli::Commander::run(int argc, char **argv) {
     }
     std::string commandName(argv[1]);
     if (commandName == "help") {
-        help();
+        if (argc == 2) {
+            help();
+        } else {
+            help(std::string(argv[2]));
+        }
         return;
     }
     auto commandIt = commands.find(commandName);
@@ -55,6 +59,30 @@ void cli::Commander::help() {
               << "This program supports following commands:" << std::endl;
     for (auto &c : commands) {
         std::cout << c.first << ": " << c.second->summary() << std::endl;
+    }
+}
+
+void cli::Commander::help(std::string commandName) {
+    auto commandIt = commands.find(commandName);
+    if (commandIt == commands.end()) {
+        std::cout << "Unknown command." << std::endl;
+        help();
+        return;
+    }
+    const auto &command = commandIt->second;
+    std::cout << "Command " << commandName << std::endl
+              << command->description() << std::endl
+              << "Accepted parameters:" << std::endl;
+    for (const auto &param : command->supported_params()) {
+        std::cout << "\t-" << param.name;
+        if (!param.optional) {
+            std::cout << " (required)";
+        }
+        std::cout << " - " << param.description;
+        if (param.hasDefault) {
+            std::cout << " (default value: \"" << param.defaultValue << "\")";
+        }
+        std::cout << std::endl;
     }
 }
 

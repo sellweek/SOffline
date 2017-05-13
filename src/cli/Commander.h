@@ -32,6 +32,7 @@ namespace cli {
         void run(int argc, char **argv);
     private:
         void help();
+        void help(std::string command);
         std::unordered_map<std::string, std::string> collect_parameters(int argc, char **argv);
         std::unordered_map<std::string, std::string> resolve_parameters(
                 const std::unordered_map<std::string, std::string> &received,
