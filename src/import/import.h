@@ -21,6 +21,7 @@ namespace import {
 
         XMLData import_xml() const;
         void save_to_sqlite(const XMLData &data);
+        void prepare_db();
         /**
          * SQLite only supports a limited number of placeholders in a single statement,
          * so an insert of a single vector of models has to be split into multiple statements.
@@ -28,6 +29,7 @@ namespace import {
          * @param data Models to insert.
          */
         void insert_with_max_len(const std::string &table, const std::vector<std::shared_ptr<models::Model>> &data);
+        static const std::string schema;
     };
 }
 

@@ -11,25 +11,7 @@
 #include "XMLAttributeImporter.h"
 
 #include <future>
-#include <iostream>
-/*
-template <typename T>
-std::vector<std::vector<const models::Model&>> split_to_max_lengths(std::vector<T> src, int max_len) {
-    size_t src_idx = 0;
-    std::vector<std::vector<const models::Model&>> result;
-    while (src_idx < src.size()) {
-        size_t dst_idx = 0;
-        std::vector<const models::Model&> dst;
-        while (dst_idx < max_len && src_idx < src.size()) {
-            dst.push_back(src.at(src_idx));
-            src_idx++;
-            dst_idx++;
-        }
-        result.push_back(dst);
-    }
-    return result;
-}
- */
+#include <fstream>
 
 template <typename M>
 std::vector<std::shared_ptr<models::Model>> make_model_vector(std::vector<std::unique_ptr<M>> in) {
@@ -108,8 +90,150 @@ namespace import {
 
     void Importer::import_all() {
         auto xml = import_xml();
+        prepare_db();
         save_to_sqlite(xml);
     }
+
+    void Importer::prepare_db() {
+        sqlite::Statement schemaPrepareStatement(db, schema);
+        schemaPrepareStatement.step();
+    }
 }
+
+const std::string import::Importer::schema = R"SCHEMA_END_MARK(
+-- Adminer 4.2.4 SQLite 3 dump
+BEGIN;
+
+DROP TABLE IF EXISTS "badges";
+CREATE TABLE "badges" (
+  "id" integer NOT NULL,
+  "user" integer NOT NULL,
+  "name" text NOT NULL,
+  "date" integer NOT NULL,
+  "class" integer NOT NULL,
+  "tag_based" integer NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "comments";
+CREATE TABLE "comments" (
+  "id" integer NOT NULL,
+  "post" integer NOT NULL,
+  "score" integer NOT NULL,
+  "text" text NOT NULL,
+  "creation_date" integer NOT NULL,
+  "user" integer NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "post_history";
+CREATE TABLE "post_history" (
+  "id" integer NOT NULL,
+  "type" integer NOT NULL,
+  "post" integer NOT NULL,
+  "guid" text NOT NULL,
+  "creation_date" integer NOT NULL,
+  "user" integer NOT NULL,
+  "comment" text NULL,
+  "text" text NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "post_links";
+CREATE TABLE "post_links" (
+  "id" integer NOT NULL,
+  "created" integer NOT NULL,
+  "source" integer NOT NULL,
+  "target" integer NOT NULL,
+  "type" integer NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("target") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY ("source") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "post_tags";
+CREATE TABLE "post_tags" (
+  "post" integer NOT NULL,
+  "tag" integer NOT NULL,
+  FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE,
+  FOREIGN KEY ("tag") REFERENCES "tags" ("id") ON DELETE CASCADE
+);
+
+
+DROP TABLE IF EXISTS "posts";
+CREATE TABLE "posts" (
+  "id" integer NOT NULL,
+  "title" text NULL,
+  "post_type" integer NOT NULL,
+  "accepted_answer" integer NULL,
+  "parent" integer NULL,
+  "creation_date" integer NOT NULL,
+  "score" integer NOT NULL,
+  "views" integer NULL,
+  "body" text NOT NULL,
+  "owner" integer NULL,
+  "last_editor" integer NULL,
+  "last_edit" integer NOT NULL,
+  "last_activity" integer NOT NULL,
+  "closed_at" integer NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("parent") REFERENCES "posts" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
+  FOREIGN KEY ("owner") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
+  FOREIGN KEY ("last_editor") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "tags";
+CREATE TABLE "tags" (
+  "id" integer NOT NULL,
+  "name" text NOT NULL,
+  "excerpt" integer NULL,
+  "wiki" integer NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("wiki") REFERENCES "posts" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
+  FOREIGN KEY ("excerpt") REFERENCES "posts" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
+);
+
+
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "users" (
+  "id" integer NOT NULL,
+  "reputation" integer NOT NULL,
+  "created_at" integer NOT NULL,
+  "display_name" text NOT NULL,
+  "last_access" integer NULL,
+  "website" text NULL,
+  "location" text NULL,
+  "about" text NULL,
+  "upvotes" integer NOT NULL,
+  "downvotes" integer NOT NULL,
+  "account_id" integer NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+
+DROP TABLE IF EXISTS "votes";
+CREATE TABLE "votes" (
+  "id" integer NOT NULL,
+  "post" integer NOT NULL,
+  "type" integer NOT NULL,
+  "user" integer NULL,
+  "creation_date" integer NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
+  FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+COMMIT;
+)SCHEMA_END_MARK";
 
 #endif
