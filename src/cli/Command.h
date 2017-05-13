@@ -12,6 +12,7 @@
 #include "ParameterProps.h"
 
 namespace cli {
+    const std::string DEFAULT_DB_LOCATION = "db.sqlite";
     class Command {
     public:
         virtual std::vector<ParameterProps> supported_params() const = 0;

@@ -64,6 +64,12 @@ namespace sqlite {
          */
         sqlite3 *get_db() { return db; }
 
+        /**
+         * Execute given SQL script, supporting multiple statements.
+         * @param sql SQL script to be executed.
+         */
+        void exec(const std::string &sql);
+
         int max_variables();
 
     private:

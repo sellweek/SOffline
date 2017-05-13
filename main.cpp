@@ -3,12 +3,9 @@
 #include <chrono>
 #include <string>
 #include <fstream>
-
-#include "import.h"
-#include "models.h"
-
 #include "cli/Commander.h"
 #include "cli/commands/TestCommand.h"
+#include "cli/commands/ImportCommand.h"
 
 int main(int argc, char **argv) {
     /*
@@ -21,6 +18,7 @@ int main(int argc, char **argv) {
      */
     cli::Commander cmdr("SOffline", "Imports Stack Overflow data dumps");
     cmdr.add_command("test", std::unique_ptr<cli::Command>(new cli::TestCommand()));
+    cmdr.add_command("import", std::unique_ptr<cli::Command>(new cli::ImportCommand()));
     cmdr.run(argc, argv);
     return 0;
 }
