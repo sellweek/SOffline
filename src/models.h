@@ -125,6 +125,13 @@ namespace models {
         virtual std::vector<SQLMetadata> sql_map() const override;
     };
 
+    struct PostTag : public Model {
+        int64_t post;
+        int64_t tag;
+        virtual std::unordered_map<std::string, std::pair<ExternalType, void*>> xml_map() const override;
+        virtual std::vector<SQLMetadata> sql_map() const override;
+    };
+
     struct User : public Model {
         int64_t id;
         int64_t reputation;

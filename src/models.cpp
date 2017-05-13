@@ -247,4 +247,18 @@ namespace models {
 
     SQLMetadata::SQLMetadata(const std::string columnName, const ExternalType columnType, void *valuePointer):
             columnName(columnName), columnType(columnType), valuePointer(valuePointer) {}
+
+    // PostTag is an M:N relation table in the SQLite database. It can't be deserialized from XML.
+    std::unordered_map<std::string, std::pair<ExternalType, void *>> PostTag::xml_map() const {
+        std::unordered_map<std::string, std::pair<ExternalType, void*>> m {};
+        return m;
+    }
+
+    std::vector<SQLMetadata> PostTag::sql_map() const {
+        std::vector<SQLMetadata> v {
+                {"post", ExternalType::Int64, (void *)&post},
+                {"tag", ExternalType::Int64, (void *)&tag},
+        };
+        return v;
+    }
 }

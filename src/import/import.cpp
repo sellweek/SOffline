@@ -12,6 +12,8 @@
 
 #include <future>
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 template <typename M>
 std::vector<std::shared_ptr<models::Model>> make_model_vector(std::vector<std::unique_ptr<M>> in) {
@@ -21,6 +23,27 @@ std::vector<std::shared_ptr<models::Model>> make_model_vector(std::vector<std::u
         out.push_back(ptr);
     }
     return out;
+}
+
+std::vector<std::string> extract_tags(std::string source) {
+    // Tags are enclosed in angle brackets like:
+    // <C++><madness><STL><depression>
+    // so we remove the first and last bracket and then split on ><
+    std::vector<std::string> tokens;
+    if (source.size() == 0) {
+        return tokens;
+    }
+    source.erase(0, 1);
+    source.erase(source.size() - 1, 1);
+    auto pos = source.find("><");
+    while (pos != source.npos) {
+        tokens.push_back(source.substr(0, pos));
+        source.erase(0, pos+2);
+        pos = source.find("><");
+    }
+    // Push in the remaining piece of string
+    tokens.push_back(source);
+    return tokens;
 }
 
 namespace import {
@@ -49,8 +72,11 @@ namespace import {
         results["comments"] = make_model_vector(comments.get());
         results["post_history"] = make_model_vector(changes.get());
         results["post_links"] = make_model_vector(links.get());
-        results["posts"] = make_model_vector(posts.get());
-        results["tags"] = make_model_vector(tags.get());
+        auto postVec = posts.get();
+        auto tagVec = tags.get();
+        results["post_tags"] = make_model_vector(make_post_tags(tagVec, postVec));
+        results["posts"] = make_model_vector(std::move(postVec));
+        results["tags"] = make_model_vector(std::move(tagVec));
         results["users"] = make_model_vector(users.get());
         results["votes"] = make_model_vector(votes.get());
         return results;
@@ -95,8 +121,30 @@ namespace import {
     }
 
     void Importer::prepare_db() {
-        sqlite::Statement schemaPrepareStatement(db, schema);
-        schemaPrepareStatement.step();
+        db.exec(schema.c_str());
+    }
+
+    std::vector<std::unique_ptr<models::PostTag>>
+    Importer::make_post_tags(const std::vector<std::unique_ptr<models::Tag>> &tags,
+                             const std::vector<std::unique_ptr<models::Post>> &posts) const {
+        std::vector<std::unique_ptr<models::PostTag>> postTags;
+        std::unordered_map<std::string, int64_t> tagMap;
+        for (const auto &tag : tags) {
+            tagMap[tag->name] = tag->id;
+        }
+        for (const auto &post : posts) {
+            auto tagNames = extract_tags(post->tagString);
+            for (const auto &name : tagNames) {
+                auto tagIdIt = tagMap.find(name);
+                if (tagIdIt != tagMap.end()) {
+                    auto postTag = new models::PostTag();
+                    postTag->post = post->id;
+                    postTag->tag = tagIdIt->second;
+                    postTags.push_back(std::unique_ptr<models::PostTag>(postTag));
+                }
+            }
+        }
+        return postTags;
     }
 }
 

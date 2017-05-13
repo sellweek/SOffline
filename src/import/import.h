@@ -22,6 +22,9 @@ namespace import {
         XMLData import_xml() const;
         void save_to_sqlite(const XMLData &data);
         void prepare_db();
+        std::vector<std::unique_ptr<models::PostTag>>
+        make_post_tags(const std::vector<std::unique_ptr<models::Tag>> &tags,
+                                                                     const std::vector<std::unique_ptr<models::Post>> &posts) const;
         /**
          * SQLite only supports a limited number of placeholders in a single statement,
          * so an insert of a single vector of models has to be split into multiple statements.
