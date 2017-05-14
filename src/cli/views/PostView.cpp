@@ -29,6 +29,11 @@ cli::PostView::PostView(sqlite::Client &db, int64_t id) {
     for (auto commentId : commentIds) {
         comments.push_back(CommentView(db, commentId));
     }
+    sqlite::Statement tagStmt(db, "SELECT tags.name FROM post_tags JOIN tags ON post_tags.tag = tags.id WHERE post_tags.post = ?");
+    tagStmt.bind(1, id);
+    while (tagStmt.step()) {
+        tags.push_back(tagStmt.get<std::string>(0));
+    }
 }
 
 void cli::PostView::print(cli::TerminalPrinter &tp) {
@@ -64,6 +69,12 @@ void cli::PostView::print(cli::TerminalPrinter &tp) {
     tp.newline();
     tp.normal(post.body);
     tp.newline();
+    if (tags.size() > 0) {
+        for (const auto &tag : tags) {
+            tp.italic(tag + " ");
+        }
+        tp.newline();
+    }
     if (comments.size() > 0) {
         tp.underline("Comments:");
         tp.newline();

@@ -215,6 +215,8 @@ CREATE TABLE "post_tags" (
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE,
   FOREIGN KEY ("tag") REFERENCES "tags" ("id") ON DELETE CASCADE
 );
+CREATE INDEX "post_tags_post" ON "post_tags" ("post");
+CREATE INDEX "post_tags_tag" ON "post_tags" ("tag");
 
 
 DROP TABLE IF EXISTS "posts";
