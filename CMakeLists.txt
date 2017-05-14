@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address" )
 
-set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.h src/models.h src/import/XMLAttributeImporter.h src/import/xml_util.h src/models.cpp src/import/import.cpp src/cli/Commander.cpp src/cli/Commander.h src/cli/Command.cpp src/cli/Command.h src/cli/ParameterProps.h src/cli/commands/TestCommand.cpp src/cli/commands/TestCommand.h src/cli/commands/ImportCommand.cpp src/cli/commands/ImportCommand.h)
+set(SOURCE_FILES main.cpp src/sqlite/sqlite_client.cpp src/sqlite/sqlite_client.h src/sqlite/sqlite_statement.h src/models.h src/import/XMLAttributeImporter.h src/import/xml_util.h src/models.cpp src/import/import.cpp src/cli/Commander.cpp src/cli/Commander.h src/cli/Command.cpp src/cli/Command.h src/cli/ParameterProps.h src/cli/commands/TestCommand.cpp src/cli/commands/TestCommand.h src/cli/commands/ImportCommand.cpp src/cli/commands/ImportCommand.h src/cli/views/PostView.cpp src/cli/views/PostView.h src/cli/TerminalPrinter.cpp src/cli/TerminalPrinter.h src/cli/NoOpPrinter.cpp src/cli/NoOpPrinter.h src/cli/ANSIPrinter.cpp src/cli/ANSIPrinter.h)
 
 find_package(PkgConfig)
 pkg_check_modules(sqlite3 REQUIRED)
