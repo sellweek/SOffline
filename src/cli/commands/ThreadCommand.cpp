@@ -7,8 +7,8 @@
 #include <sqlite/SqliteClient.h>
 #include <sqlite/SqliteStatement.h>
 #include <cli/ANSIPrinter.h>
-#include <cli/views/PostView.h>
 #include <cli/views/helpers.h>
+#include <cli/views/DetailedPostView.h>
 #include "ThreadCommand.h"
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::ThreadCommand::supported_params() const {
@@ -42,7 +42,7 @@ void cli::ThreadCommand::run(std::unordered_map<std::string, std::string> args) 
         auto answers = get_answers(db, parent);
         ANSIPrinter p(std::cout);
         try {
-            PostView parentView(db, parent);
+            DetailedPostView parentView(db, parent);
             p.reverse("QUESTION:");
             p.newline();
             parentView.print(p);
@@ -50,7 +50,7 @@ void cli::ThreadCommand::run(std::unordered_map<std::string, std::string> args) 
                 p.newline();
                 p.reverse("ACCEPTED ANSWER:");
                 p.newline();
-                PostView(db, parentView.post.acceptedAnswer).print(p);
+                DetailedPostView(db, parentView.post.acceptedAnswer).print(p);
             }
             if (answers.size() != 0) {
                 p.newline();
@@ -58,7 +58,7 @@ void cli::ThreadCommand::run(std::unordered_map<std::string, std::string> args) 
                 p.newline();
                 for (int64_t answerId : answers) {
                     if (answerId != parentView.post.acceptedAnswer) {
-                        PostView(db, answerId).print(p);
+                        DetailedPostView(db, answerId).print(p);
                     }
                 }
             } else {

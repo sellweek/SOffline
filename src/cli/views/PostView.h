@@ -17,11 +17,9 @@ namespace cli {
     class PostView {
     public:
         PostView(sqlite::Client &db, int64_t id);
-        void print(TerminalPrinter &tp);
+        virtual void print(TerminalPrinter &tp);
         models::Post post;
         std::string ownerName;
-        std::vector<CommentView> comments;
-        std::vector<std::string> tags;
     };
 }
 
