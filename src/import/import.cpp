@@ -193,7 +193,7 @@ CREATE TABLE "post_history" (
   FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
 );
-
+CREATE INDEX "post_history_post_type" ON "post_history" ("post", "type");
 
 DROP TABLE IF EXISTS "post_links";
 CREATE TABLE "post_links" (
@@ -280,6 +280,19 @@ CREATE TABLE "votes" (
   FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
 );
+
+DROP VIEW IF EXISTS posts_markdown;
+CREATE VIEW posts_markdown AS
+    SELECT posts.id, posts.title, posts.post_type, posts.accepted_answer, posts.parent, posts.creation_date, posts.score, posts.views, post_history.text AS body, posts.owner, posts.last_editor, posts.last_edit, posts.last_activity, posts.closed_at
+    FROM posts
+        LEFT JOIN post_history ON posts.id = post_history.post
+        WHERE
+            (post_history.type = 2 OR post_history.type = 5)
+            AND post_history.id = (
+                SELECT MAX(post_history.id) FROM post_history
+                    WHERE post_history.post = posts.id
+                          AND (post_history.type = 2 OR post_history.type = 5));
+;
 
 COMMIT;
 )SCHEMA_END_MARK";
