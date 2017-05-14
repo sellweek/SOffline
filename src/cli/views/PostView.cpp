@@ -2,15 +2,38 @@
 // Created by Róbert Selvek on 13/05/2017.
 //
 
+#ifndef SEMESTRALKA_POSTVIEW_CPP
+#define SEMESTRALKA_POSTVIEW_CPP
+
+#include <sqlite/sqlite_statement.h>
+
 #include "PostView.h"
 #include "helpers.h"
 
-cli::PostView::PostView(models::Post post, std::string owner): post(post), ownerName(owner) {}
-
-void cli::PostView::print(bool abbreviated, cli::TerminalPrinter &tp) {
-    if (abbreviated) {
-        tp.italic(std::to_string(post.id) + "\t");
+cli::PostView::PostView(sqlite::Client &db, int64_t id) {
+    sqlite::Statement select(db, "SELECT posts_markdown.*, users.display_name FROM posts_markdown LEFT JOIN users ON"
+            " posts_markdown.owner = users.id WHERE posts_markdown.id = ?;");
+    select.bind(1, id);
+    select.step();
+    post = select.get_mapped<models::Post>();
+    if (post.id == 0) {
+        throw DoesNotExistException();
     }
+    ownerName = select.get<std::string>(post.sql_map().size());
+    std::vector<int64_t> commentIds;
+    sqlite::Statement commentStmt(db, "SELECT id FROM comments WHERE post = ?");
+    commentStmt.bind(1, id);
+    while (commentStmt.step()) {
+        commentIds.push_back(commentStmt.get<int64_t>(0));
+    }
+    for (auto commentId : commentIds) {
+        comments.push_back(CommentView(db, commentId));
+    }
+}
+
+void cli::PostView::print(cli::TerminalPrinter &tp) {
+    tp.italic(std::to_string(post.id));
+    tp.normal("|");
     std::string typeChar;
     if (post.type == 1) {
         typeChar = 'Q';
@@ -36,11 +59,20 @@ void cli::PostView::print(bool abbreviated, cli::TerminalPrinter &tp) {
         tp.normal("|");
         tp.bold(ownerName);
     }
-    abbreviated ? tp.normal("\t") : tp.newline();
-    tp.underline(post.title);
-    if (!abbreviated) {
-        tp.newline();
-        tp.normal(post.body);
-    }
     tp.newline();
+    tp.underline(post.title);
+    tp.newline();
+    tp.normal(post.body);
+    tp.newline();
+    if (comments.size() > 0) {
+        tp.underline("Comments:");
+        tp.newline();
+        for (auto &cv : comments) {
+            cv.print(tp);
+        }
+        tp.newline();
+    }
+
 }
+
+#endif

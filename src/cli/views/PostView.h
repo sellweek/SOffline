@@ -10,14 +10,18 @@
 
 #include <models.h>
 #include <cli/TerminalPrinter.h>
+#include <sqlite/sqlite_client.h>
+#include "CommentView.h"
 
 namespace cli {
     class PostView {
     public:
-        PostView(models::Post post, std::string owner);
-        void print(bool abbreviated, TerminalPrinter &tp);
+        PostView(sqlite::Client &db, int64_t id);
+        void print(TerminalPrinter &tp);
         models::Post post;
         std::string ownerName;
+        std::vector<CommentView> comments;
+        std::vector<std::string> tags;
     };
 }
 

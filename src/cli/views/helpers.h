@@ -12,8 +12,13 @@
 #include <sqlite/sqlite_client.h>
 
 namespace cli {
+    class DoesNotExistException: std::exception {
+    public:
+        virtual const char *what() const throw() override {
+            return "Entity not found";
+        }
+    };
     std::string make_date_string(const std::tm &time);
-    PostView get_post_for_id(sqlite::Client &db, int64_t id);
 }
 
 #endif //SEMESTRALKA_HELPERS_H

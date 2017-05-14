@@ -292,7 +292,6 @@ CREATE VIEW posts_markdown AS
                 SELECT MAX(post_history.id) FROM post_history
                     WHERE post_history.post = posts.id
                           AND (post_history.type = 2 OR post_history.type = 5));
-;
 
 COMMIT;
 )SCHEMA_END_MARK";

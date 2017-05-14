@@ -13,7 +13,6 @@ std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::ShowP
     std::vector<ParameterProps> parameters {
             {"db", "SQLite database to read from", false, true, true, DEFAULT_DB_LOCATION},
             {"id", "ID of the post to show", false, true, false, ""},
-            {"abbrev", "Only print basic post information", true, false, false, ""},
     };
     return parameters;
 }
@@ -36,13 +35,14 @@ void cli::ShowPostCommand::run(std::unordered_map<std::string, std::string> args
     }
     try {
         sqlite::Client db(args["db"]);
-        auto v = get_post_for_id(db, postId);
-        if (v.post.id == 0) {
+        try {
+            PostView post(db, postId);
+            ANSIPrinter p(std::cout);
+            post.print(p);
+        } catch (DoesNotExistException e) {
             std::cout << "This post doesn't exist." << std::endl;
-            return;
         }
-        ANSIPrinter p(std::cout);
-        v.print(args.find("abbrev") != args.end(), p);
+
     } catch (sqlite::Exception e) {
         std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;
         return;

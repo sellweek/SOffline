@@ -12,13 +12,4 @@ namespace cli {
         return date.str();
     }
 
-    PostView get_post_for_id(sqlite::Client &db, int64_t id) {
-        sqlite::Statement select(db, "SELECT posts_markdown.*, users.display_name FROM posts_markdown LEFT JOIN users ON"
-                " posts_markdown.owner = users.id WHERE posts_markdown.id = ?;");
-        select.bind(1, id);
-        select.step();
-        models::Post post = select.get_mapped<models::Post>();
-        PostView v(post, select.get<std::string>(post.sql_map().size()));
-        return v;
-    }
 }
