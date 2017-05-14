@@ -12,10 +12,9 @@
 
 namespace cli {
     class SummaryPostView : public PostView {
+    public:
         SummaryPostView(sqlite::Client &db, int64_t id);
         virtual void print(TerminalPrinter &tp) override;
-        models::Post post;
-        std::string ownerName;
     };
 }
 
