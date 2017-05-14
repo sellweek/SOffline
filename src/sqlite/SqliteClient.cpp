@@ -7,7 +7,7 @@
 
 #include <cstring>
 
-#include "sqlite_client.h"
+#include "SqliteClient.h"
 
 namespace sqlite {
 

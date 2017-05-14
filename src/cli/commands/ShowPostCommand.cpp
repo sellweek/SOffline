@@ -3,7 +3,7 @@
 //
 
 #include "ShowPostCommand.h"
-#include <sqlite/sqlite_statement.h>
+#include <sqlite/SqliteStatement.h>
 #include <iostream>
 #include <cli/views/PostView.h>
 #include <cli/ANSIPrinter.h>

@@ -5,7 +5,7 @@
 #ifndef SEMESTRALKA_POSTVIEW_CPP
 #define SEMESTRALKA_POSTVIEW_CPP
 
-#include <sqlite/sqlite_statement.h>
+#include <sqlite/SqliteStatement.h>
 
 #include "PostView.h"
 #include "helpers.h"
@@ -64,8 +64,10 @@ void cli::PostView::print(cli::TerminalPrinter &tp) {
         tp.normal("|");
         tp.bold(ownerName);
     }
-    tp.newline();
-    tp.underline(post.title);
+    if (post.title != "") {
+        tp.newline();
+        tp.underline(post.title);
+    }
     tp.newline();
     tp.normal(post.body);
     tp.newline();

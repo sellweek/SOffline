@@ -3,7 +3,7 @@
 //
 
 #include "helpers.h"
-#include <sqlite/sqlite_statement.h>
+#include <sqlite/SqliteStatement.h>
 
 namespace cli {
     std::string make_date_string(const std::tm &time) {

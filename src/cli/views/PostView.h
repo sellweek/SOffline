@@ -10,7 +10,7 @@
 
 #include <models.h>
 #include <cli/TerminalPrinter.h>
-#include <sqlite/sqlite_client.h>
+#include <sqlite/SqliteClient.h>
 #include "CommentView.h"
 
 namespace cli {

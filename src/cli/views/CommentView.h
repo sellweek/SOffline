@@ -5,7 +5,7 @@
 #ifndef SEMESTRALKA_COMMENTVIEW_H
 #define SEMESTRALKA_COMMENTVIEW_H
 
-#include <sqlite/sqlite_client.h>
+#include <sqlite/SqliteClient.h>
 #include <cli/TerminalPrinter.h>
 #include <models.h>
 

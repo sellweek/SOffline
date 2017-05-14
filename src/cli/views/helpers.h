@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 #include "PostView.h"
-#include <sqlite/sqlite_client.h>
+#include <sqlite/SqliteClient.h>
 
 namespace cli {
     class DoesNotExistException: std::exception {
