@@ -181,6 +181,7 @@ namespace sqlite {
                     *((bool *) md.valuePointer) = get<int64_t>(i) != 0;
                 }
             }
+            return val;
         }
 
     private:
