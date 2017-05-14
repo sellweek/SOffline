@@ -241,6 +241,7 @@ CREATE TABLE "posts" (
   FOREIGN KEY ("last_editor") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
 );
 CREATE INDEX "post_parent" ON "posts" ("parent");
+CREATE INDEX "post_body" ON "posts" ("body");
 
 
 DROP TABLE IF EXISTS "tags";
