@@ -137,12 +137,12 @@ namespace models {
                 {"creation_date", ExternalType::Datetime, (void *)&createdAt},
                 {"score", ExternalType::Int64, (void *)&score},
                 {"views", ExternalType::Int64, (void *)&views},
-                {"body", ExternalType::String, (void *)&body},
                 {"owner", ExternalType::Int64, (void *)&owner},
                 {"last_editor", ExternalType::Int64, (void *)&lastEditor},
                 {"last_edit", ExternalType::Datetime, (void *)&lastEdit},
                 {"last_activity", ExternalType::Datetime, (void *)&lastActivity},
                 {"closed_at", ExternalType::Datetime, (void *)&closedAt},
+                {"body", ExternalType::String, (void *)&body},
         };
         return v;
     }

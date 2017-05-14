@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "models.h"
-#include "sqlite/sqlite_client.h"
+#include "sqlite/SqliteClient.h"
 
 namespace import {
     class Importer {

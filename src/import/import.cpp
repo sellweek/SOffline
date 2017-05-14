@@ -6,8 +6,8 @@
 #define SEMESTRALKA_IMPORT_CPP
 
 #include "import.h"
-#include "sqlite/sqlite_client.h"
-#include "sqlite/sqlite_statement.h"
+#include "sqlite/SqliteClient.h"
+#include "sqlite/SqliteStatement.h"
 #include "XMLAttributeImporter.h"
 
 #include <future>
@@ -229,17 +229,18 @@ CREATE TABLE "posts" (
   "creation_date" integer NOT NULL,
   "score" integer NOT NULL,
   "views" integer NULL,
-  "body" text NOT NULL,
   "owner" integer NULL,
   "last_editor" integer NULL,
   "last_edit" integer NOT NULL,
   "last_activity" integer NOT NULL,
   "closed_at" integer NULL,
+  "body" text NOT NULL,
   PRIMARY KEY ("id"),
   FOREIGN KEY ("parent") REFERENCES "posts" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
   FOREIGN KEY ("owner") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
   FOREIGN KEY ("last_editor") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
 );
+CREATE INDEX "post_parent" ON "posts" ("parent");
 
 
 DROP TABLE IF EXISTS "tags";
@@ -285,7 +286,9 @@ CREATE TABLE "votes" (
 
 DROP VIEW IF EXISTS posts_markdown;
 CREATE VIEW posts_markdown AS
-    SELECT posts.id, posts.title, posts.post_type, posts.accepted_answer, posts.parent, posts.creation_date, posts.score, posts.views, post_history.text AS body, posts.owner, posts.last_editor, posts.last_edit, posts.last_activity, posts.closed_at
+    SELECT posts.id, posts.title, posts.post_type, posts.accepted_answer, posts.parent,
+           posts.creation_date, posts.score, posts.views, posts.owner, posts.last_editor,
+           posts.last_edit, posts.last_activity, posts.closed_at, post_history.text AS body
     FROM posts
         LEFT JOIN post_history ON posts.id = post_history.post
         WHERE
