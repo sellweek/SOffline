@@ -12,7 +12,7 @@
 #include <memory>
 #include <sstream>
 
-#include "sqlite_client.h"
+#include "SqliteClient.h"
 #include "models.h"
 
 namespace sqlite {
