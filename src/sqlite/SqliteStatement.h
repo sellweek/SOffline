@@ -190,7 +190,7 @@ namespace sqlite {
 
         void check_error(int code) {
             if (code) {
-                sqlite3_finalize(stmt);
+                // We used to call finalize here, but in the destructor already calls it instead of us
                 throw Exception(sqlite3_errmsg(client.get_db()));
             }
         }

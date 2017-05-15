@@ -86,7 +86,7 @@ namespace xml {
 
     template <typename M>
     XMLAttributeImporter<M>::XMLAttributeImporter(std::string path, std::string rootElemName):
-            rootElemName(rootElemName), rootHandled(false), doc(), path(path) {}
+            rootElemName(rootElemName), path(path), rootHandled(false), doc() {}
 
     template <typename M>
     std::vector<std::unique_ptr<M>> XMLAttributeImporter<M>::parse() {

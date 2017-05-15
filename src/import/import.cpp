@@ -149,7 +149,6 @@ namespace import {
 }
 
 const std::string import::Importer::schema = R"SCHEMA_END_MARK(
--- Adminer 4.2.4 SQLite 3 dump
 BEGIN;
 
 DROP TABLE IF EXISTS "badges";
@@ -193,7 +192,9 @@ CREATE TABLE "post_history" (
   FOREIGN KEY ("user") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
 );
+
 CREATE INDEX "post_history_post_type" ON "post_history" ("post", "type");
+
 
 DROP TABLE IF EXISTS "post_links";
 CREATE TABLE "post_links" (
@@ -215,8 +216,10 @@ CREATE TABLE "post_tags" (
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE,
   FOREIGN KEY ("tag") REFERENCES "tags" ("id") ON DELETE CASCADE
 );
-CREATE INDEX "post_tags_post" ON "post_tags" ("post");
+
 CREATE INDEX "post_tags_tag" ON "post_tags" ("tag");
+
+CREATE INDEX "post_tags_post" ON "post_tags" ("post");
 
 
 DROP TABLE IF EXISTS "posts";
@@ -240,8 +243,18 @@ CREATE TABLE "posts" (
   FOREIGN KEY ("owner") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION,
   FOREIGN KEY ("last_editor") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE NO ACTION
 );
-CREATE INDEX "post_parent" ON "posts" ("parent");
+
+CREATE INDEX "posts_accepted_answer" ON "posts" ("accepted_answer");
+
+CREATE INDEX "post_owner_type" ON "posts" ("owner", "post_type");
+
 CREATE INDEX "post_body" ON "posts" ("body");
+
+CREATE INDEX "post_parent" ON "posts" ("parent");
+
+
+DROP VIEW IF EXISTS "posts_markdown";
+CREATE TABLE "posts_markdown" ("id" integer, "title" text, "post_type" integer, "accepted_answer" integer, "parent" integer, "creation_date" integer, "score" integer, "views" integer, "owner" integer, "last_editor" integer, "last_edit" integer, "last_activity" integer, "closed_at" integer, "body" text);
 
 
 DROP TABLE IF EXISTS "tags";
@@ -272,6 +285,16 @@ CREATE TABLE "users" (
   PRIMARY KEY ("id")
 );
 
+CREATE INDEX "users_created_at" ON "users" ("created_at");
+
+CREATE INDEX "users_upvotes" ON "users" ("upvotes");
+
+CREATE INDEX "users_downvotes" ON "users" ("downvotes");
+
+CREATE INDEX "users_reputation" ON "users" ("reputation");
+
+CREATE INDEX "users_display_name" ON "users" ("display_name");
+
 
 DROP TABLE IF EXISTS "votes";
 CREATE TABLE "votes" (
@@ -285,7 +308,8 @@ CREATE TABLE "votes" (
   FOREIGN KEY ("post") REFERENCES "posts" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
-DROP VIEW IF EXISTS posts_markdown;
+
+DROP TABLE IF EXISTS "posts_markdown";
 CREATE VIEW posts_markdown AS
     SELECT posts.id, posts.title, posts.post_type, posts.accepted_answer, posts.parent,
            posts.creation_date, posts.score, posts.views, posts.owner, posts.last_editor,

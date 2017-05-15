@@ -12,4 +12,10 @@ namespace cli {
         return date.str();
     }
 
+
+    int64_t execute_simple_int_statement(sqlite::Statement &st, int64_t bound) {
+        st.bind(1, bound);
+        st.step();
+        return st.get<int64_t>(0);
+    }
 }

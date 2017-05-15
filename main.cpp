@@ -7,6 +7,8 @@
 #include <cli/commands/ThreadCommand.h>
 #include <cli/commands/RecentCommand.h>
 #include <cli/commands/SearchCommand.h>
+#include <cli/commands/UserCommand.h>
+#include <cli/commands/UsersCommand.h>
 
 int main(int argc, char **argv) {
     cli::Commander cmdr("SOffline", "Imports Stack Overflow data dumps");
@@ -15,6 +17,8 @@ int main(int argc, char **argv) {
     cmdr.add_command("post", std::unique_ptr<cli::Command>(new cli::ShowPostCommand()));
     cmdr.add_command("recent", std::unique_ptr<cli::Command>(new cli::RecentCommand()));
     cmdr.add_command("search", std::unique_ptr<cli::Command>(new cli::SearchCommand()));
+    cmdr.add_command("user", std::unique_ptr<cli::Command>(new cli::UserCommand()));
+    cmdr.add_command("users", std::unique_ptr<cli::Command>(new cli::UsersCommand()));
     cmdr.run(argc, argv);
     return 0;
 }
