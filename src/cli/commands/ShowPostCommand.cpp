@@ -5,9 +5,9 @@
 #include "ShowPostCommand.h"
 #include <sqlite/SqliteStatement.h>
 #include <iostream>
-#include <cli/views/PostView.h>
 #include <cli/ANSIPrinter.h>
 #include <cli/views/helpers.h>
+#include <cli/views/DetailedPostView.h>
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::ShowPostCommand::supported_params() const {
     std::vector<ParameterProps> parameters {
@@ -36,7 +36,7 @@ void cli::ShowPostCommand::run(std::unordered_map<std::string, std::string> args
     try {
         sqlite::Client db(args["db"]);
         try {
-            PostView post(db, postId);
+            DetailedPostView post(db, postId);
             ANSIPrinter p(std::cout);
             post.print(p);
         } catch (DoesNotExistException e) {

@@ -9,6 +9,7 @@
 #include <cli/commands/SearchCommand.h>
 #include <cli/commands/UserCommand.h>
 #include <cli/commands/UsersCommand.h>
+#include <cli/commands/TagsCommand.h>
 
 int main(int argc, char **argv) {
     cli::Commander cmdr("SOffline", "Imports Stack Overflow data dumps");
@@ -19,6 +20,7 @@ int main(int argc, char **argv) {
     cmdr.add_command("search", std::unique_ptr<cli::Command>(new cli::SearchCommand()));
     cmdr.add_command("user", std::unique_ptr<cli::Command>(new cli::UserCommand()));
     cmdr.add_command("users", std::unique_ptr<cli::Command>(new cli::UsersCommand()));
+    cmdr.add_command("tags", std::unique_ptr<cli::Command>(new cli::TagsCommand()));
     cmdr.run(argc, argv);
     return 0;
 }
