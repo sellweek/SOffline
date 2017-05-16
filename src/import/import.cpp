@@ -97,8 +97,11 @@ namespace import {
 
 
     void Importer::insert_with_max_len(const std::string &table, const std::vector<std::shared_ptr<models::Model>> &data) {
-        int maxVars = db.max_variables();
-        size_t modelsPerStatement = maxVars / data[0]->sql_map().size();
+        //int maxVars = db.max_variables();
+        //size_t modelsPerStatement = maxVars / data[0]->sql_map().size();
+        // Turns out there are many other limits that affect multiple-value inserts
+        // and some of those are set rather curiously in Progtest environment.
+        size_t modelsPerStatement = 25;
         size_t data_idx = 0;
         while (data_idx < data.size()) {
             size_t dst_idx = 0;
