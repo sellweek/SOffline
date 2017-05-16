@@ -6,6 +6,7 @@
 #define SEMESTRALKA_COMMAND_H
 
 #include <string>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 #include <sqlite/SqliteClient.h>

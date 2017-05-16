@@ -51,7 +51,7 @@ void cli::SearchCommand::run(std::unordered_map<std::string, std::string> args) 
         sqlite::Client db(args["db"]);
         std::string statementBody = "SELECT id FROM POSTS WHERE "  + whereTextSource + " AND " + wherePostType + "ORDER BY score LIMIT ?";
         sqlite::Statement select(db, statementBody);
-        for (int i = 1; i <= placeholders; i++) {
+        for (size_t i = 1; i <= placeholders; i++) {
             select.bind(i, args["text"]);
         }
         select.bind(placeholders+1, limit);

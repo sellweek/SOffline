@@ -11,6 +11,7 @@
 #include <string>
 #include <memory>
 #include <sstream>
+#include <cstring>
 
 #include "SqliteClient.h"
 #include "models.h"
@@ -55,14 +56,14 @@ namespace sqlite {
             }
             ss << sql_list(columns) << " VALUES ";
             auto placeholders = sql_list(std::vector<std::string>(columns.size(), "?"));
-            for (int i = 0; i < inserted.size(); i++) {
+            for (size_t i = 0; i < inserted.size(); i++) {
                 ss << placeholders;
                 if (i != inserted.size() - 1) {
                     ss << ',';
                 }
             }
             create_sqlite3_stmt(ss.str());
-            for (int i = 0; i < inserted.size(); i++) {
+            for (size_t i = 0; i < inserted.size(); i++) {
                 bind_mapped(i*map.size()+1, *inserted[i]);
             }
         }
@@ -102,9 +103,9 @@ namespace sqlite {
             check_error(sqlite3_bind_null(stmt, idx));
         }
 
-        void bind_mapped(int startIdx, const models::Model &m) {
+        void bind_mapped(size_t startIdx, const models::Model &m) {
             auto map = m.sql_map();
-            for (int i = startIdx; i < startIdx + map.size(); i++) {
+            for (size_t i = startIdx; i < startIdx + map.size(); i++) {
                 switch (map[i - startIdx].columnType) {
                     case models::ExternalType::Int64:
                         bind(i, *((int64_t*) map.at(i - startIdx).valuePointer));
@@ -143,8 +144,8 @@ namespace sqlite {
          * Get number of columns returned by the statement. Should only be called after step() has been called at least once.
          * @return Number of columns returned, the maximum index which can be used in get() + 1.
          */
-        int columns() const noexcept {
-            return sqlite3_column_count(stmt);
+        size_t columns() const noexcept {
+            return (size_t) sqlite3_column_count(stmt);
         }
 
         /**
@@ -167,7 +168,7 @@ namespace sqlite {
         T get_mapped() {
             T val {};
             std::vector<models::SQLMetadata> sql_mapping = val.sql_map();
-            for (int i = 0; i < sql_mapping.size(); i++) {
+            for (size_t i = 0; i < sql_mapping.size(); i++) {
                 auto md = sql_mapping[i];
                 if (md.columnType == models::ExternalType::Int64) {
                     *((std::int64_t *) md.valuePointer) = get<int64_t>(i);
@@ -216,7 +217,7 @@ namespace sqlite {
             // Why, tell me why, can't language designers just accept a trailing comma?
             std::ostringstream ss;
             ss << '(';
-            for (int i = 0; i < values.size(); i++) {
+            for (size_t i = 0; i < values.size(); i++) {
                 ss << values[i];
                 if (i != values.size() - 1) {
                     ss << ',';

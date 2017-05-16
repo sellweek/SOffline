@@ -18,7 +18,7 @@
 template <typename M>
 std::vector<std::shared_ptr<models::Model>> make_model_vector(std::vector<std::unique_ptr<M>> in) {
     std::vector<std::shared_ptr<models::Model>> out;
-    for (int i = 0; i < in.size(); i++) {
+    for (size_t i = 0; i < in.size(); i++) {
         std::shared_ptr<models::Model> ptr(std::move(in[i]));
         out.push_back(ptr);
     }

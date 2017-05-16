@@ -18,7 +18,11 @@ namespace models {
                     os << "'" << *((std::string*)pair.second.second) << "'";
                     break;
                 case ExternalType::Datetime:
-                    os << std::put_time((std::tm*)pair.second.second, "%c");
+                    // GCC Developers apparently forgot to put this one C++11 
+                    // feature into GCC 4.9, despite loudly proclaiming
+                    // "C++11 has been completely supported since G++ 4.8!"
+                    // So, I guess, this one's going to be commented out.
+                    //os << std::put_time((std::tm*)pair.second.second, "%c");
                     break;
                 case ExternalType::Bool:
                     os << *((bool*)pair.second.second);
@@ -52,7 +56,7 @@ namespace models {
                 {"tag_based", ExternalType::Bool, (void *)&tagBased},
         };
         return v;
-    };
+    }
 
     std::unordered_map<std::string, std::pair<ExternalType, void *>> Comment::xml_map() const {
         std::unordered_map<std::string, std::pair<ExternalType, void*>> m {

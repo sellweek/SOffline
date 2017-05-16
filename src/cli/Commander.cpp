@@ -91,7 +91,7 @@ void cli::Commander::help(std::string commandName) {
 // Fails if a parameter is supplied with a value beginning with -
 std::unordered_map<std::string, std::string> cli::Commander::collect_parameters(int argc, char **argv) {
     std::unordered_map<std::string, std::string> params;
-    size_t i = 2;
+    int i = 2;
     while (i < argc) {
         std::string name(argv[i]);
         if (name.size() == 0 || name[0] != '-') {
@@ -148,4 +148,4 @@ std::unordered_map<std::string, std::string> cli::Commander::resolve_parameters(
         }
     }
     return processed;
-};
+}
