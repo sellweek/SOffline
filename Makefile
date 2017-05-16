@@ -19,6 +19,7 @@ run: compile
 
 clean:
 	find src -name "*.o" | xargs rm
+	rm -rf doc
 	rm -f ./.deps
 	rm -f ./$(TARGET)
 
