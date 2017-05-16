@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <sqlite/SqliteClient.h>
 
 #include "ParameterProps.h"
 

@@ -15,12 +15,6 @@ cli::TagView::TagView(sqlite::Client &db, int64_t id) {
     tag = select.get_mapped<models::Tag>();
     sqlite::Statement countStmt(db, "SELECT COUNT(*) FROM post_tags WHERE tag = ?");
     questionCount = execute_simple_int_statement(countStmt, id);
-    if (tag.excerpt != 0) {
-        sqlite::Statement descriptionStmt(db, "SELECT body FROM posts_markdown WHERE id = ?");
-        descriptionStmt.bind(1, tag.excerpt);
-        descriptionStmt.step();
-        description = descriptionStmt.get<std::string>(0);
-    }
 }
 
 void cli::TagView::print(cli::TerminalPrinter &tp) {
@@ -29,12 +23,4 @@ void cli::TagView::print(cli::TerminalPrinter &tp) {
     tp.normal("|");
     tp.bold(std::to_string(questionCount));
     tp.normal("Q");
-    if (tag.wiki != 0) {
-        tp.normal("|Full description in post ");
-        tp.bold(std::to_string(tag.wiki));
-    }
-    if (tag.excerpt != 0) {
-        tp.newline();
-        tp.normal(description);
-    }
 }

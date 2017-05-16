@@ -7,7 +7,7 @@
 #include <sqlite/SqliteClient.h>
 #include <sqlite/SqliteStatement.h>
 #include <cli/ANSIPrinter.h>
-#include <cli/views/TagView.h>
+#include <cli/views/SummaryTagView.h>
 #include "TagsCommand.h"
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::TagsCommand::supported_params() const {
@@ -66,7 +66,7 @@ void cli::TagsCommand::run(std::unordered_map<std::string, std::string> args) {
         select.bind(2, offset);
         ANSIPrinter p(std::cout);
         while (select.step()) {
-            TagView v(db, select.get<int64_t>(0));
+            SummaryTagView v(db, select.get<int64_t>(0));
             v.print(p);
             p.newline();
         }

@@ -60,6 +60,8 @@ void cli::Commander::help() {
     for (auto &c : commands) {
         std::cout << c.first << ": " << c.second->summary() << std::endl;
     }
+    std::cout << "You can use help <command name> to show additional information about command parameters and operaion."
+              << std::endl;
 }
 
 void cli::Commander::help(std::string commandName) {

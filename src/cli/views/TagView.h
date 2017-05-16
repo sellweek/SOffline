@@ -14,10 +14,9 @@ namespace cli {
     public:
         TagView(sqlite::Client &db, int64_t id);
         virtual void print(TerminalPrinter &tp);
-    private:
+    protected:
         models::Tag tag;
         int64_t questionCount;
-        std::string description;
     };
 }
 
