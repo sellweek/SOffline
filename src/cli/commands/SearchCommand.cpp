@@ -55,11 +55,11 @@ void cli::SearchCommand::run(std::unordered_map<std::string, std::string> args) 
             select.bind(i, args["text"]);
         }
         select.bind(placeholders+1, limit);
-        ANSIPrinter p(std::cout);
+        std::unique_ptr<TerminalPrinter> p = getPrinter();
         while (select.step()) {
             auto id = select.get<int64_t>(0);
-            SummaryPostView(db, id).print(p);
-            p.newline();
+            SummaryPostView(db, id).print(*p);
+            p->newline();
         }
     } catch (sqlite::Exception e) {
         std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;

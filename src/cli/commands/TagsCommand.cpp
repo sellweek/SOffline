@@ -64,11 +64,11 @@ void cli::TagsCommand::run(std::unordered_map<std::string, std::string> args) {
         sqlite::Statement select(db, statementBody.str());
         select.bind(1, limit);
         select.bind(2, offset);
-        ANSIPrinter p(std::cout);
+        std::unique_ptr<TerminalPrinter> p = getPrinter();
         while (select.step()) {
             SummaryTagView v(db, select.get<int64_t>(0));
-            v.print(p);
-            p.newline();
+            v.print(*p);
+            p->newline();
         }
     } catch (sqlite::Exception e) {
         std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;

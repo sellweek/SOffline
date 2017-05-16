@@ -34,15 +34,15 @@ void cli::UserCommand::run(std::unordered_map<std::string, std::string> args) {
         while (userIdStmt.step()) {
             userIds.push_back(userIdStmt.get<int64_t>(0));
         }
-        ANSIPrinter p(std::cout);
+        std::unique_ptr<TerminalPrinter> p = getPrinter();
         if (userIds.size() == 0) {
-            p.normal("No such user");
-            p.newline();
+            p->normal("No such user");
+            p->newline();
             return;
         }
         for (int64_t id : userIds) {
-            DetailedUserView(db, id).print(p);
-            p.newline();
+            DetailedUserView(db, id).print(*p);
+            p->newline();
         }
 
     } catch (sqlite::Exception e) {

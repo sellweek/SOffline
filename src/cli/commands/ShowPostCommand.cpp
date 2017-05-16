@@ -37,8 +37,8 @@ void cli::ShowPostCommand::run(std::unordered_map<std::string, std::string> args
         sqlite::Client db(args["db"]);
         try {
             DetailedPostView post(db, postId);
-            ANSIPrinter p(std::cout);
-            post.print(p);
+            std::unique_ptr<TerminalPrinter> p = getPrinter();
+            post.print(*p);
         } catch (DoesNotExistException e) {
             std::cout << "This post doesn't exist." << std::endl;
         }

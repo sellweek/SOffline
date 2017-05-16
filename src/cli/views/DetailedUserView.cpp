@@ -41,8 +41,8 @@ void cli::DetailedUserView::print(cli::TerminalPrinter &tp) {
     if (user.about != "") {
         tp.bold("About me: ");
         tp.normal(user.about);
+        tp.newline();
     }
-    tp.newline();
     tp.normal("The last time we've seen this user was on ");
     tp.bold(make_date_string(user.lastAccess));
     tp.normal(" his or her Stack Exchange account has ID: ");

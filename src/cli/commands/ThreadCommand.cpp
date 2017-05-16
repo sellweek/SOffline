@@ -40,31 +40,31 @@ void cli::ThreadCommand::run(std::unordered_map<std::string, std::string> args) 
         sqlite::Client db(args["db"]);
         auto parent = get_post_parent(db, postId);
         auto answers = get_answers(db, parent);
-        ANSIPrinter p(std::cout);
+        std::unique_ptr<TerminalPrinter> p = getPrinter();
         try {
             DetailedPostView parentView(db, parent);
-            p.reverse("QUESTION:");
-            p.newline();
-            parentView.print(p);
+            p->reverse("QUESTION:");
+            p->newline();
+            parentView.print(*p);
             if (parentView.post.acceptedAnswer != 0) {
-                p.newline();
-                p.reverse("ACCEPTED ANSWER:");
-                p.newline();
-                DetailedPostView(db, parentView.post.acceptedAnswer).print(p);
+                p->newline();
+                p->reverse("ACCEPTED ANSWER:");
+                p->newline();
+                DetailedPostView(db, parentView.post.acceptedAnswer).print(*p);
             }
             if (answers.size() != 0) {
-                p.newline();
-                p.reverse("ANSWERS:");
-                p.newline();
+                p->newline();
+                p->reverse("ANSWERS:");
+                p->newline();
                 for (int64_t answerId : answers) {
                     if (answerId != parentView.post.acceptedAnswer) {
-                        DetailedPostView(db, answerId).print(p);
+                        DetailedPostView(db, answerId).print(*p);
                     }
                 }
             } else {
-                p.newline();
-                p.bold("Oops, it seems this post has no answers. :(");
-                p.newline();
+                p->newline();
+                p->bold("Oops, it seems this post has no answers. :(");
+                p->newline();
             }
         } catch (DoesNotExistException e) {
             std::cout << "This post doesn't exist." << std::endl;

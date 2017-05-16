@@ -11,6 +11,7 @@
 
 namespace cli {
     class NoOpPrinter : public TerminalPrinter {
+    public:
         NoOpPrinter(std::ostream &os);
         virtual void bold(std::string text) override;
         virtual void italic(std::string text) override;
