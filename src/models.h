@@ -13,7 +13,15 @@
 #include <ostream>
 #include <unordered_map>
 
+/**
+* Namespace models contains classes and structures used to move data through the program,
+* representing different entities from Stack Exchange Data Dump and the ways they should
+* be deserialized from XML and SQL and serialized to SQL.
+*/
 namespace models {
+    /**
+    * Enum representing different scalar types that can be loaded from an external source (XML or SQL).
+    */
     enum class ExternalType {
         Int64,
         String,
@@ -21,17 +29,34 @@ namespace models {
         Bool
     };
 
+    /**
+    * Represents metadata about a column in an SQL table.
+    */
     struct SQLMetadata {
-        const std::string columnName;
-        const ExternalType columnType;
-        void *valuePointer;
+        const std::string columnName; /// Name of the column
+        const ExternalType columnType; /// Type of the column
+        void *valuePointer; /// Pointer to the respective member of the object returning this struct.
 
         SQLMetadata(std::string columnName, ExternalType columnType, void *valuePointer);
     };
 
+    /**
+    * Represents a data object that can be deserialized from XML and SQL and serialized to SQL.
+    */
     class Model {
     public:
+        /**
+        * Get a map which maps XML field names to their type and a pointer to the respective
+        * member of the deserialized object into which they should be saved.
+        * @return A map of XML deserialization metadata
+        */
         virtual std::unordered_map<std::string, std::pair<ExternalType, void*>> xml_map() const = 0;
+        /**
+        * Get a vector of column medata in the object's SQL table.
+        * *NOTE:* The columns must be returned in the same order they are used in the database,
+        * otherwise many convenience functions will fail.
+        * @return Column metadata, in the order of the columns in the database.
+        */
         virtual std::vector<SQLMetadata> sql_map() const = 0;
         friend std::ostream &operator <<(std::ostream &os, const models::Model &m);
     };

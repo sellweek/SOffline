@@ -13,17 +13,51 @@
 #include <string>
 #include <vector>
 
+/// Containes classes and functions related to deserializing Stack Exchange's
+/// data dumps.
 namespace xml {
 
+    /**
+    * This class implements the Visitor pattern used by tinyXML2 to deserialize models
+    * from XML files. It uses models::Model's xml_map() method to automatically convert
+    * attributes and save them to correct members of the model.
+    * It is implemented to be able to work with Stack Exchange's XML exports which comprise
+    * of one root element named after the model contained in the file. Every record is a child
+    * of this node and has all of its data contained in the attributes.
+    *
+    * The preferred way to use this class is through XMLAttributeImporter::construct_and_parse
+    * method.
+    *
+    * @tparam M Model to extract from the XML file. M must implement model's xml_map method.
+    */
     template <typename M>
     class XMLAttributeImporter : public tinyxml2::XMLVisitor {
     public:
+        /**
+        * Construct an XMLAttributeImporter.
+        * @param path Path to the XML file that should be imported.
+        * @param rootElemName Name of file's root element. This is checked and if it doesn't match, an exception is thrown.
+        */
         XMLAttributeImporter(std::string path, std::string rootElemName);
 
+        /**
+        * Implemented to satisfy XMLVisitor's interface.
+        */
         virtual bool VisitEnter(const tinyxml2::XMLElement &elem, const tinyxml2::XMLAttribute *attr) override;
 
+        /**
+        * Parse the XML file.
+        * @return Vector of unique_ptrs to deserialized models.
+        */
         virtual std::vector<std::unique_ptr<M>> parse();
 
+        /**
+        * Creates an XMLAttributeImporter for XML file at the given path and 
+        * returns the results of calling parse on it.
+        * @param path Path to the XML file that should be imported.
+        * @param rootElemName Name of file's root element. This is checked and if it doesn't match, an exception is thrown.
+        * @returns Vector of unique_ptrs to deserialized models.
+        */
         static std::vector<std::unique_ptr<M>> construct_and_parse(std::string path, std::string rootElemName)  {
             XMLAttributeImporter<M> importer(path, rootElemName);
             return std::move(importer.parse());

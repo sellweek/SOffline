@@ -14,6 +14,7 @@
 #include "ParameterProps.h"
 #include "TerminalPrinter.h"
 
+/// Implements the command-line user interface.
 namespace cli {
     const std::string DEFAULT_DB_LOCATION = "db.sqlite";
     class Command {

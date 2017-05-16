@@ -70,6 +70,11 @@ namespace sqlite {
          */
         void exec(const std::string &sql);
 
+        /**
+        * Get the maximum number of placeholders that can be used in a single SQLite statement
+        * in this connection.
+        * @return The maximum number of placeholders that can be used in a single SQLite statement
+        */
         int max_variables();
 
     private:

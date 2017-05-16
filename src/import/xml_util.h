@@ -35,6 +35,7 @@ namespace xml {
         }
     };
 
+    /// Thrown when a timestamp in an XML file can't be parsed.
     class DateTimeParseException : public std::exception {
     public:
         virtual const char *what() const throw() override {
@@ -42,6 +43,11 @@ namespace xml {
         }
     };
 
+    /**
+    * Parse time fromatted as in Stack Exchange data dumps.
+    * @param timeString a timestamp in YYYY-M-DTH:M:S format
+    * @return std::tm filled with information coming from the string
+    */
     inline std::tm parse_time(const std::string &timeString) {
         std::tm val;
         // Another place where we can't use C++ functions because G++ developers

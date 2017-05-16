@@ -189,6 +189,9 @@ namespace sqlite {
         sqlite3_stmt *stmt;
         Client &client;
 
+        /**
+        * Check SQLite return code. If it indicates an error, get it's string and throw it as an exception.
+        */
         void check_error(int code) {
             if (code) {
                 // We used to call finalize here, but in the destructor already calls it instead of us
@@ -196,6 +199,7 @@ namespace sqlite {
             }
         }
 
+        
         void check_get_preconditions(size_t col) const {
             if (col >= columns()) {
                 throw ColumnOutOfBoundsException();

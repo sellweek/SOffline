@@ -21,7 +21,8 @@ namespace models {
                     // GCC Developers apparently forgot to put this one C++11 
                     // feature into GCC 4.9, despite loudly proclaiming
                     // "C++11 has been completely supported since G++ 4.8!"
-                    // So, I guess, this one's going to be commented out.
+                    // So, I guess, this one's going to be commented out,
+                    // since it's only used for debugging.
                     //os << std::put_time((std::tm*)pair.second.second, "%c");
                     break;
                 case ExternalType::Bool:

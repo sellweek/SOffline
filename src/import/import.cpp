@@ -84,8 +84,8 @@ namespace import {
 
 
     void Importer::save_to_sqlite(const Importer::XMLData &data) {
-        sqlite::Statement deferForeign(db, "PRAGMA defer_foreign_keys=1;");
         // We won't need to turn these off, that happens automatically after each COMMIT
+        sqlite::Statement deferForeign(db, "PRAGMA defer_foreign_keys=1;");
         deferForeign.step();
         sqlite::Statement(db, "BEGIN;").step();
         for (const auto &table : data) {
@@ -151,6 +151,7 @@ namespace import {
     }
 }
 
+/// The database schema. Embedded in the executable to make it as portable as possible.
 const std::string import::Importer::schema = R"SCHEMA_END_MARK(
 BEGIN;
 
