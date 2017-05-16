@@ -5,8 +5,8 @@
 #ifndef SEMESTRALKA_IMPORTCOMMAND_H
 #define SEMESTRALKA_IMPORTCOMMAND_H
 
-#include "cli/Command.h"
-#include "cli/ParameterProps.h"
+#include <cli/Command.h>
+#include <cli/ParameterProps.h>
 
 namespace cli {
     class ImportCommand : public Command {

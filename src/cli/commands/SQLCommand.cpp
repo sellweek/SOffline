@@ -7,6 +7,7 @@
 #include <cli/views/SummaryPostView.h>
 #include <cli/views/SummaryTagView.h>
 #include <cli/views/SummaryUserView.h>
+#include <cli/views/helpers.h>
 #include "SQLCommand.h"
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::SQLCommand::supported_params() const {
@@ -60,6 +61,11 @@ void cli::SQLCommand::run(std::unordered_map<std::string, std::string> args) {
         auto p = getPrinter();
         p->normal("An error occurred when communicating with the database: ");
         p->normal(e.what());
+        p->newline();
+        return;
+    } catch (DoesNotExistException e) {
+        auto p = getPrinter();
+        p->normal("One of the IDs returned by the SQL query was not found. Did you use the correct model?");
         p->newline();
         return;
     }

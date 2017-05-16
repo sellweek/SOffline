@@ -3,7 +3,7 @@
 //
 
 #include "ImportCommand.h"
-#include "import/import.h"
+#include <import/import.h>
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::ImportCommand::supported_params() const {
     std::vector<ParameterProps> parameters {
