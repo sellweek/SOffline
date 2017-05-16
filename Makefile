@@ -18,7 +18,7 @@ run: compile
 	./$(TARGET)
 
 clean:
-	gfind src -name "*.o" | xargs rm
+	find src -name "*.o" | xargs rm
 	rm -f ./.deps
 	rm -f ./$(TARGET)
 
