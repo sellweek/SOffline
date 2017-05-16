@@ -8,10 +8,10 @@
 #include <exception>
 #include <string>
 #include <ctime>
-#include <iomanip>
 #include <sstream>
+#include <time.h>
 
-#include "include/tinyxml2.h"
+#include <include/tinyxml2.h>
 
 namespace xml {
     /// Wraps an unexpected error returned by TinyXML parser
@@ -44,11 +44,12 @@ namespace xml {
 
     inline std::tm parse_time(const std::string &timeString) {
         std::tm val;
-        std::istringstream iss(timeString);
-        iss >> std::get_time(&val, "%Y-%m-%dT%H:%M:%S");
-        if (iss.fail()) {
+        // Another place where we can't use C++ functions because G++ developers
+        // lied about feature-completeness of G++ 4.8
+        if (strptime(timeString.c_str(), "%Y-%m-%dT%H:%M:%S", &val) == nullptr) {
             throw DateTimeParseException();
         }
+
         return val;
     }
 }
