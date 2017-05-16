@@ -11,6 +11,7 @@
 #include <cli/commands/UsersCommand.h>
 #include <cli/commands/TagsCommand.h>
 #include <cli/commands/TagCommand.h>
+#include <cli/commands/SQLCommand.h>
 
 int main(int argc, char **argv) {
     cli::Commander cmdr("SOffline", "Imports Stack Overflow data dumps");
@@ -23,6 +24,7 @@ int main(int argc, char **argv) {
     cmdr.add_command("users", std::unique_ptr<cli::Command>(new cli::UsersCommand()));
     cmdr.add_command("tags", std::unique_ptr<cli::Command>(new cli::TagsCommand()));
     cmdr.add_command("tag", std::unique_ptr<cli::Command>(new cli::TagCommand()));
+    cmdr.add_command("sql", std::unique_ptr<cli::Command>(new cli::SQLCommand()));
     cmdr.run(argc, argv);
     return 0;
 }
