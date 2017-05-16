@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "tinyxml2.h"
+#include "include/tinyxml2.h"
 
 namespace xml {
     /// Wraps an unexpected error returned by TinyXML parser

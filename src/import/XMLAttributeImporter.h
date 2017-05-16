@@ -5,7 +5,7 @@
 #ifndef SEMESTRALKA_ATTRIBUTECOLLECTINGVISITOR_H
 #define SEMESTRALKA_ATTRIBUTECOLLECTINGVISITOR_H
 
-#include "tinyxml2.h"
+#include "include/tinyxml2.h"
 #include "xml_util.h"
 #include "models.h"
 #include <iostream>
