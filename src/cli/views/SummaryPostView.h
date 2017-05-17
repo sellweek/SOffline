@@ -11,6 +11,9 @@
 #include "PostView.h"
 
 namespace cli {
+    /**
+    * Displays basic information about a single post on one line.
+    */
     class SummaryPostView : public PostView {
     public:
         SummaryPostView(sqlite::Client &db, int64_t id);

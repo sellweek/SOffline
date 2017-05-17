@@ -11,10 +11,14 @@
 #include <models.h>
 #include <cli/TerminalPrinter.h>
 #include <sqlite/SqliteClient.h>
+#include <cli/View.h>
 #include "CommentView.h"
 
 namespace cli {
-    class PostView {
+    /**
+    * Retrieves and displays a basic information about a post.
+    */
+    class PostView : public View {
     public:
         PostView(sqlite::Client &db, int64_t id);
         virtual void print(TerminalPrinter &tp);

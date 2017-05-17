@@ -9,9 +9,13 @@
 #include <models.h>
 #include <sqlite/SqliteClient.h>
 #include <cli/TerminalPrinter.h>
+#include <cli/View.h>
 
 namespace cli {
-    class UserView {
+    /**
+    * Retrieves and displays basic information about a user.
+    */
+    class UserView : public View {
     public:
         UserView(sqlite::Client &db, int64_t id);
         virtual void print(TerminalPrinter &tp) = 0;

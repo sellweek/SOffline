@@ -8,9 +8,13 @@
 #include <sqlite/SqliteClient.h>
 #include <cli/TerminalPrinter.h>
 #include <models.h>
+#include <cli/View.h>
 
 namespace cli {
-    class CommentView {
+    /**
+    * Retrieves and displays a single comment.
+    */
+    class CommentView : public View {
     public:
         CommentView(sqlite::Client &db, int64_t id);
         void print(cli::TerminalPrinter &tp);

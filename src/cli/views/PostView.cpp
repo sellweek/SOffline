@@ -8,7 +8,6 @@
 #include <sqlite/SqliteStatement.h>
 
 #include "PostView.h"
-#include "helpers.h"
 
 cli::PostView::PostView(sqlite::Client &db, int64_t id) {
     sqlite::Statement select(db, "SELECT posts_markdown.*, users.display_name FROM posts_markdown LEFT JOIN users ON"

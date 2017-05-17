@@ -6,7 +6,6 @@
 #include <sqlite/SqliteStatement.h>
 #include <iostream>
 #include <cli/ANSIPrinter.h>
-#include <cli/views/helpers.h>
 #include <cli/views/DetailedPostView.h>
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::ShowPostCommand::supported_params() const {

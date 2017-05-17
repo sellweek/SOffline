@@ -10,6 +10,10 @@
 #include <cli/TerminalPrinter.h>
 
 namespace cli {
+    /**
+    * A TerminalPrinter which doesn't generate any control sequences.
+    * Every function works just like normal().
+    */
     class NoOpPrinter : public TerminalPrinter {
     public:
         NoOpPrinter(std::ostream &os);

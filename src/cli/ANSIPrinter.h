@@ -9,6 +9,10 @@
 #include <cli/TerminalPrinter.h>
 
 namespace cli {
+    /**
+    * A TerminalPrinter which generates ANSI terminal
+    * escape sequences.
+    */
     class ANSIPrinter : public TerminalPrinter {
     public:
         ANSIPrinter(std::ostream &os);
@@ -19,6 +23,9 @@ namespace cli {
         virtual void color(Color color, std::string text) override;
         virtual void normal(std::string text) override;
     private:
+        /**
+        * Send an SGR to the terminal, then print the text and then reset it.
+        */
         void sgr_text(int code, std::string text);
         void reset();
         void generate_sgr(int code);

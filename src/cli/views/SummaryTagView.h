@@ -8,6 +8,9 @@
 #include "TagView.h"
 
 namespace cli {
+    /**
+    * Retrieves basic metrics about a tag and displays them together with its information.
+    */
     class SummaryTagView : public TagView {
     public:
         SummaryTagView(sqlite::Client &db, int64_t id);

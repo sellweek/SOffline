@@ -8,6 +8,9 @@
 #include "PostView.h"
 
 namespace cli {
+    /**
+    * Retrieves and displays detailed information about a post, as well as its title and text.
+    */
     class DetailedPostView : public PostView {
     public:
         DetailedPostView(sqlite::Client &db, int64_t id);

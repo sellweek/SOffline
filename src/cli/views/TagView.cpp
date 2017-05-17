@@ -4,7 +4,6 @@
 
 #include <sqlite/SqliteStatement.h>
 #include "TagView.h"
-#include "helpers.h"
 
 cli::TagView::TagView(sqlite::Client &db, int64_t id) {
     sqlite::Statement select(db, "SELECT * FROM tags WHERE id = ?");

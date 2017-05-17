@@ -8,9 +8,13 @@
 #include <sqlite/SqliteClient.h>
 #include <cli/TerminalPrinter.h>
 #include <models.h>
+#include <cli/View.h>
 
 namespace cli {
-    class TagView {
+    /**
+    * Retrieves basic information about a single tag.
+    */
+    class TagView : public View {
     public:
         TagView(sqlite::Client &db, int64_t id);
         virtual void print(TerminalPrinter &tp);

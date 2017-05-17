@@ -4,7 +4,6 @@
 
 
 #include "CommentView.h"
-#include "helpers.h"
 #include <sqlite/SqliteStatement.h>
 
 cli::CommentView::CommentView(sqlite::Client &db, int64_t id) {

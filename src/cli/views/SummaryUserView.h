@@ -9,6 +9,10 @@
 #include "UserView.h"
 
 namespace cli {
+    /**
+    * Retrieves some metrics about user's activity and displays it together
+    * with basic information about the user.
+    */
     class SummaryUserView : public UserView {
     public:
         SummaryUserView(sqlite::Client &db, int64_t id);

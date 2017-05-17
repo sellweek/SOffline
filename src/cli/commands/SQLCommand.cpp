@@ -7,7 +7,6 @@
 #include <cli/views/SummaryPostView.h>
 #include <cli/views/SummaryTagView.h>
 #include <cli/views/SummaryUserView.h>
-#include <cli/views/helpers.h>
 #include "SQLCommand.h"
 
 std::vector<cli::ParameterProps, std::allocator<cli::ParameterProps>> cli::SQLCommand::supported_params() const {

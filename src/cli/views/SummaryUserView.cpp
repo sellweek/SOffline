@@ -4,7 +4,6 @@
 
 #include <sqlite/SqliteStatement.h>
 #include "SummaryUserView.h"
-#include "helpers.h"
 
 cli::SummaryUserView::SummaryUserView(sqlite::Client &db, int64_t id) : UserView(db, id) {
     questionCount = 0;

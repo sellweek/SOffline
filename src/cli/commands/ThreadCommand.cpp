@@ -7,7 +7,6 @@
 #include <sqlite/SqliteClient.h>
 #include <sqlite/SqliteStatement.h>
 #include <cli/ANSIPrinter.h>
-#include <cli/views/helpers.h>
 #include <cli/views/DetailedPostView.h>
 #include "ThreadCommand.h"
 

@@ -4,7 +4,6 @@
 
 #include <sqlite/SqliteStatement.h>
 #include "UserView.h"
-#include "helpers.h"
 
 cli::UserView::UserView(sqlite::Client &db, int64_t id) {
     sqlite::Statement select(db, "SELECT * FROM users WHERE id = ?");

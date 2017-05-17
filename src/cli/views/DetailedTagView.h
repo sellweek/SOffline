@@ -9,6 +9,9 @@
 #include "SummaryPostView.h"
 
 namespace cli {
+    /**
+    * Retrieves posts associated with a tag and displays their summaries along with tag information.
+    */
     class DetailedTagView : public TagView {
     public:
         DetailedTagView(sqlite::Client &db, int64_t id);

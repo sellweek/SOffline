@@ -9,6 +9,9 @@
 #include "SummaryPostView.h"
 
 namespace cli {
+    /**
+    * Displays information about a user together with their posts.
+    */
     class DetailedUserView : public UserView {
     public:
         DetailedUserView(sqlite::Client &db, int64_t id);

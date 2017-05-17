@@ -4,7 +4,6 @@
 
 #include <sqlite/SqliteStatement.h>
 #include "DetailedUserView.h"
-#include "helpers.h"
 
 cli::DetailedUserView::DetailedUserView(sqlite::Client &db, int64_t id) : UserView(db, id) {
     sqlite::Statement asked(db, "SELECT id FROM posts WHERE owner = ? AND post_type=1");

@@ -14,7 +14,11 @@
 #include "ParameterProps.h"
 #include "TerminalPrinter.h"
 
-/// Implements the command-line user interface.
+/** 
+* Implements the command-line user interface. Please note that Command's child 
+* classes are not documented. Their basic structure is in cli::Command documentation
+* and other details are provided by the user-facing docs.
+*/
 namespace cli {
     /// Default location in which commands will look for SQLite database file.
     const std::string DEFAULT_DB_LOCATION = "db.sqlite";
