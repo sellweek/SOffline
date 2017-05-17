@@ -9,10 +9,17 @@
 #include <cstdio>
 #include <iostream>
 
-std::unique_ptr<cli::TerminalPrinter> cli::Command::getPrinter() {
+
+cli::Command::Command() {
     if (ttyname(fileno(stdout)) == nullptr) {
-        return std::unique_ptr<TerminalPrinter>(new NoOpPrinter(std::cout));
+        printer = std::unique_ptr<TerminalPrinter>(new NoOpPrinter(std::cout));
     } else {
-        return std::unique_ptr<TerminalPrinter>(new ANSIPrinter(std::cout));
+        printer = std::unique_ptr<TerminalPrinter>(new ANSIPrinter(std::cout));
     }
+}
+
+void cli::Command::log_sqlite_exception(sqlite::Exception e) {
+    printer->bold("An error occurred when communicating with the database: ");
+    printer->normal(e.what());
+    printer->newline();
 }

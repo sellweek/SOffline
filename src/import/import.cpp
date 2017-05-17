@@ -48,7 +48,7 @@ std::vector<std::string> extract_tags(std::string source) {
 
 namespace import {
 
-    Importer::Importer(std::string sources, const std::string & destination_db): directory(sources), db(destination_db) {}
+    Importer::Importer(std::string sources, const std::string & destination_db): directory(sources), db(destination_db, true) {}
 
     Importer::XMLData Importer::import_xml() const {
         Importer::XMLData results;

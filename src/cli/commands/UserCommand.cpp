@@ -34,19 +34,19 @@ void cli::UserCommand::run(std::unordered_map<std::string, std::string> args) {
         while (userIdStmt.step()) {
             userIds.push_back(userIdStmt.get<int64_t>(0));
         }
-        std::unique_ptr<TerminalPrinter> p = getPrinter();
+
         if (userIds.size() == 0) {
-            p->normal("No such user");
-            p->newline();
+            printer->normal("No such user");
+            printer->newline();
             return;
         }
         for (int64_t id : userIds) {
-            DetailedUserView(db, id).print(*p);
-            p->newline();
+            DetailedUserView(db, id).print(*printer);
+            printer->newline();
         }
 
     } catch (sqlite::Exception e) {
-        std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;
+        log_sqlite_exception(e);
         return;
     }
 }

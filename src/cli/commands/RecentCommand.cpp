@@ -37,14 +37,13 @@ void cli::RecentCommand::run(std::unordered_map<std::string, std::string> args) 
         sqlite::Client db(args["db"]);
         sqlite::Statement select(db, "SELECT id FROM posts WHERE post_type=1 ORDER BY creation_date DESC LIMIT ?");
         select.bind(1, limit);
-        std::unique_ptr<TerminalPrinter> p = getPrinter();
         while (select.step()) {
             auto id = select.get<int64_t>(0);
-            SummaryPostView(db, id).print(*p);
-            p->newline();
+            SummaryPostView(db, id).print(*printer);
+            printer->newline();
         }
     } catch (sqlite::Exception e) {
-        std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;
+        log_sqlite_exception(e);
         return;
     }
 }

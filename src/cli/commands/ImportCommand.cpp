@@ -27,11 +27,12 @@ void cli::ImportCommand::run(std::unordered_map<std::string, std::string> args) 
     	import::Importer importer(args.at("src"), args.at("db"));
     	importer.import_all();
     } catch (xml::Exception e) {
-    	auto p = getPrinter();
-        p->normal("There was an error when parsing XML files: ");
-        p->normal(e.what());
-        p->newline();
-        p->normal("Is your Stack Exchange export data complete?");
-        p->newline();
+        printer->bold("There was an error when parsing XML files: ");
+        printer->normal(e.what());
+        printer->newline();
+        printer->normal("Is your Stack Exchange export data complete?");
+        printer->newline();
+    } catch (sqlite::Exception e) {
+        log_sqlite_exception(e);
     }
 }

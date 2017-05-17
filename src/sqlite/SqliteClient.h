@@ -47,8 +47,9 @@ namespace sqlite {
         /**
          * Open the database at the given path in the local filesystem.
          * @param path Path of the sqlite database file.
+         * @param create Sets whether the database should be created if it doesn't exist yet.
         */
-        Client(const std::string &path);
+        Client(const std::string &path, bool create = false);
 
         /// Client objects can not be copied.
         Client(const Client &) = delete;

@@ -32,41 +32,36 @@ void cli::SQLCommand::run(std::unordered_map<std::string, std::string> args) {
     try {
         sqlite::Client db(args["db"]);
         sqlite::Statement stmt(db, args["sql"]);
-        std::unique_ptr<TerminalPrinter> p = getPrinter();
         std::string model = args["model"];
         while (stmt.step()) {
             if (stmt.columns() > 1) {
-                p->normal("Too many selected elements.");
-                p->newline();
+                printer->normal("Too many selected elements.");
+                printer->newline();
                 return;
             }
             int64_t id = stmt.get<int64_t>(0);
 
             if (model == "comment") {
-                CommentView(db, id).print(*p);
+                CommentView(db, id).print(*printer);
             } else if (model == "post") {
-                SummaryPostView(db, id).print(*p);
+                SummaryPostView(db, id).print(*printer);
             } else if (model == "tag") {
-                SummaryTagView(db, id).print(*p);
+                SummaryTagView(db, id).print(*printer);
             } else if (model == "user") {
-                SummaryUserView(db, id).print(*p);
+                SummaryUserView(db, id).print(*printer);
             } else {
-                p->normal("No such model");
-                p->newline();
+                printer->normal("No such model");
+                printer->newline();
                 return;
             }
-            p->newline();
+            printer->newline();
         }
     } catch (sqlite::Exception e) {
-        auto p = getPrinter();
-        p->normal("An error occurred when communicating with the database: ");
-        p->normal(e.what());
-        p->newline();
+        log_sqlite_exception(e);
         return;
     } catch (DoesNotExistException e) {
-        auto p = getPrinter();
-        p->normal("One of the IDs returned by the SQL query was not found. Did you use the correct model?");
-        p->newline();
+        printer->normal("One of the IDs returned by the SQL query was not found. Did you use the correct model?");
+        printer->newline();
         return;
     }
 }

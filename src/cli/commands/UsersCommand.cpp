@@ -70,14 +70,13 @@ void cli::UsersCommand::run(std::unordered_map<std::string, std::string> args) {
         sqlite::Statement select(db, statementBody.str());
         select.bind(1, limit);
         select.bind(2, offset);
-        std::unique_ptr<TerminalPrinter> p = getPrinter();
         while (select.step()) {
             SummaryUserView v(db, select.get<int64_t>(0));
-            v.print(*p);
-            p->newline();
+            v.print(*printer);
+            printer->newline();
         }
     } catch (sqlite::Exception e) {
-        std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;
+        log_sqlite_exception(e);
         return;
     }
 }

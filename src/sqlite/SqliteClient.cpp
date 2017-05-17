@@ -11,9 +11,12 @@
 
 namespace sqlite {
 
-    Client::Client(const std::string &path) {
-        int error = sqlite3_open_v2(path.c_str(), &db, SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
-                                    nullptr);
+    Client::Client(const std::string &path, bool create) {
+        auto flags = SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE;
+        if (create) {
+            flags |= SQLITE_OPEN_CREATE;
+        }
+        int error = sqlite3_open_v2(path.c_str(), &db, flags, nullptr);
         if (error) {
             Exception exc(sqlite3_errmsg(db));
             sqlite3_close(db);

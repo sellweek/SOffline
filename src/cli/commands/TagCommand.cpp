@@ -30,17 +30,16 @@ void cli::TagCommand::run(std::unordered_map<std::string, std::string> args) {
         sqlite::Statement idStmt(db, "SELECT id FROM tags WHERE name LIKE ?");
         idStmt.bind(1, args["name"]);
         bool tagFound = false;
-        std::unique_ptr<TerminalPrinter> p = getPrinter();
         while (idStmt.step()) {
             tagFound = true;
-            DetailedTagView(db, idStmt.get<int64_t>(0)).print(*p);
-            p->newline();
+            DetailedTagView(db, idStmt.get<int64_t>(0)).print(*printer);
+            printer->newline();
         }
         if (!tagFound) {
             std::cout << "No tag with given name found" << std::endl;
         }
     } catch (sqlite::Exception e) {
-        std::cout << "An error occurred when communicating with the database: " << e.what() << std::endl;
+        log_sqlite_exception(e);
         return;
     }
 }
