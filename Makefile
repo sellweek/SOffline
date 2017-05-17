@@ -9,7 +9,7 @@ CXX=g++
 CXXFLAGS=-Wall -pedantic -Wno-long-long -O0 -ggdb -Isrc -std=c++11
 LDFLAGS=-lsqlite3 -lpthread
 
-all: compile
+all: compile doc
 
 compile: .deps $(OFILES)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $(OFILES)
