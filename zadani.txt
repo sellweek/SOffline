@@ -1,1 +1,70 @@
-TODO
+Stack Overflow Offline
+Podrobné zadanie práce
+===================================
+Stack Exchange - platforma zastrešujúca Stack Overflow a mnoho ďalších Q&A
+komunít pravidelne na Archive.org zverejňuje exporty svojich databáz vo formáte
+XML. Cieľom tejto semestrálnej práce je spracovať tieto XML súbory, uložiť ich
+do SQL databáze a postaviť nad ňou užívateľské rozhranie, ktoré umožní v dátach
+vyhľadávať a prehľadne ich zobrazovať.
+
+Technológie použité na vypracovanie
+-------------------------------------
+- Jazyk C++ (samozrejme)
+- Databáza SQLite.
+   - Zvolená pre jej kompaktnosť a ľahkú integráciu do existujúcich C aplikácií.
+   - Nevyžaduje inštaláciu žiadnych ďalších databázových serverov a vytvára jeden
+     súbor, ktorý sa dá prenášať a zálohovať.
+   - Podporuje model, kde namiesto jedného rozsiahleho dotazu môže programátor použiť
+     bez ujmy na výkone viacero menších dotazov, čo výrazne uľahčilo tvorbu kódu pre
+     užívateľské rozhranie
+   - SQLite C rozhranie je zabalené do jednoduchého C++ rozhrania, implementovaného
+     ako súčasť práce.
+- Knižnica TinyXML2 na parsovanie XML súborov
+  - Ide o malú a jednoducho integrovateľnú knižnicu, ktorá má natívne C++ rozhranie.
+  - Použitie povolené počas mailovej konverzácie s J. Kukačkom dňa 1.4.2017
+  - (počas implementácie práce sa výber knižnice ukázal ako nie úplne optimálny,
+     keďže podporuje iba model DOM a nie streamovanie dát, importy veľkých XML
+     súborov zaberajú zbytočne veľké množstvo pamäte)
+- Neinteraktívne textové rozhranie
+  - Program je bežná aplikácia príkazovej riadky, všetky informácie potrebné ku
+    svojmu behu prijíma ako parametre príkazovej riadky
+  - Zvolené pre
+    - Jednoduchosť implementácie
+    - Familiárnosť programátorov (ktorí môžu túto aplikáciu používať) s podobnými
+      programami, napríklad man, info a podobne
+    - Jednoduchosť integrácie s inými programami pomocou unixových pipes.
+
+Funkcionalita práce
+-------------------------------------
+- Import
+  - Program je schopný po zadaní zložky s XML súbormi z Data Dumpu vytvoriť SQLite
+    databázu s adekvátnou štruktúrou a vložiť do nej dáta
+- Zobrazenie postu
+  - "Post" v terminológií Stack Exchange je ľubovoľná otázka, odpoveď na otázku
+    alebo wiki článok. Každý post môže mať aj komentáre.
+  - Každý post môže mať komentáre a má rôzne metadáta.
+  - V prípade, že užívateľ pozná ID postu (vo všetkých výpisoch je ID prvé),
+    môže si zobraziť informácie o ňom, jeho obsah a komentáre naň.
+- Zobrazenie vlákna
+  - Ak má užívateľ ID odpovede alebo otázky, na jej základe si dokáže vypísať kompletné
+    vlákno, tj. otázku, odpoveď, ktorú autor otázky vybral ako správnu a aj ostatné odpovede,
+    zoradené podľa skóre, ktoré im ostatní užívatelia dali.
+- Vyhľadávanie v otázkach a odpovediach
+  - Je možné vyhľadávať prostredníctvom výrazou so syntaxou SQL LIKE.
+  - Je možné vybrať, či sa vyhľadávať má len v titulkoch alebo v celých
+    textoch a či len v otázkach alebo aj v odpovediach.
+- Zobrazenie posledných otázok
+  - Je možné zobraziť určitý počet posledne položených otázok.
+- Zobrazenie zoznamu užívateľov
+  - Je možné zobraziť určitý počet užívateľov, zoradených podľa vybraného kritéria.
+- Zobrazenie profilu užívateľa
+  - Na základe mena užívateľa (s použitím SQL LIKE syntaxe) sa dá zobraziť jeho kompletný
+    profil, vrátane jeho otázok a odpovedí.
+- Zobrazenie zoznamu tagov
+  - Je možné zobraziť určitý počet tagov, zoradených podľa vybraného kritéria.
+- Zobrazenie informácií o tagu
+  - Na základe mena tagu (s použitím SQL LIKE syntaxe) sa dá zobraziť jeho kompletný
+    popis a otázky, ktoré sú ním označené.
+- Vykonanie ľubovoľného SQL dotazu.
+  - Je možné programu dať ľubovoľný SQL dotaz, ktorý vracia zoznam ID objektov, ktoré dokáže
+    vypísať (posty, komentáre, užívatelia, tagy) a program tieto objekty vypíše.

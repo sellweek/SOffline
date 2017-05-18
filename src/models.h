@@ -42,6 +42,8 @@ namespace models {
 
     /**
     * Represents a data object that can be deserialized from XML and SQL and serialized to SQL.
+    * XML files these models are based on are documented at
+    * https://meta.stackexchange.com/questions/2677/database-schema-documentation-for-the-public-data-dump-and-sede
     */
     class Model {
     public:

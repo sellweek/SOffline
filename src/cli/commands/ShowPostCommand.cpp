@@ -21,7 +21,7 @@ std::string cli::ShowPostCommand::summary() const {
 }
 
 std::string cli::ShowPostCommand::description() const {
-    return "Displays information and body of a post with the requested ID";
+    return "Displays information and body of a post with the requested ID. A post is either a question, a comment or a wiki article.";
 }
 
 void cli::ShowPostCommand::run(std::unordered_map<std::string, std::string> args) {
