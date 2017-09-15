@@ -1,4 +1,4 @@
-TARGET=selverob
+TARGET=soffline
 SOURCES=src
 INCLUDE=src/include
 
